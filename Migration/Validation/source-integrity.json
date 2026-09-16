@@ -1,0 +1,470 @@
+{
+  "luaFiles": 46,
+  "luaBytes": 1161941,
+  "allLuaIdentical": true,
+  "allLuaSyntaxPass": true,
+  "audioFiles": 18,
+  "allAudioIdentical": true,
+  "files": [
+    {
+      "path": "scripts/Achievement.lua",
+      "sha256": "9cb0cfb484bf92523f180b6ea456aa08df6213e765be2043f72ddd3d9301781b",
+      "bytes": 33439,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/battle/BattleScene.lua",
+      "sha256": "3a14e1425df7343faadfb6867aea46c3edc147ef062412d11eb7af1703b98667",
+      "bytes": 46889,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/battle/Enemy.lua",
+      "sha256": "a6a53ce7d113293ac40aa17c4a539d02b3e05739d3a26f1cfcc45f0da4883889",
+      "bytes": 55837,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/battle/EnemyBullet.lua",
+      "sha256": "10d64665f0210c9c93dac0dcd00f48ef5f38625b8972077e1db4fa5ab8222f94",
+      "bytes": 15041,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/battle/Loot.lua",
+      "sha256": "555b2b7b84b6afc44a50769d529c6bec9379d28e025180b611a649f9d4be5bf7",
+      "bytes": 18622,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/battle/MapEvent.lua",
+      "sha256": "233066fdce9f818e727b8b2c2f62858825642408f48b797715fd17c2440364a2",
+      "bytes": 14660,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/battle/MapVariant.lua",
+      "sha256": "4c537f6e646a0b15da56e10f8ff8b54533e30439a39c1a40eafb880619a3907e",
+      "bytes": 16704,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/battle/Player.lua",
+      "sha256": "4a46876068385bc8aa1a74519e4573849cad6358cde47eaa6f53080eae62f231",
+      "bytes": 29508,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/battle/Projectile.lua",
+      "sha256": "178a5b2f0669caa70f5865d2e046e98347385b2a6848b4fe7598cfbd74f32a8d",
+      "bytes": 31343,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/battle/RuneEffects.lua",
+      "sha256": "66a1997dd5a5f7ed13e428bf766f30496cc91a77862d560014ebb746227b79f7",
+      "bytes": 33768,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/battle/RuneResonance.lua",
+      "sha256": "b6d67a48b87890900105848f445e601f9d7456beb33946842caa350aced57ad1",
+      "bytes": 12138,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/battle/Skill.lua",
+      "sha256": "2314b12a80af4160cd62a18fb68217cb6d0892c411014d1035266e0d106e7645",
+      "bytes": 147243,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/battle/SpecialTerrain.lua",
+      "sha256": "e2c0d3dbfc79fb093fb680de6cded8c3ba363c730a331c46b8abdc9766ed08ae",
+      "bytes": 21435,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/battle/Wave.lua",
+      "sha256": "b517c54ed4cfbd2c4297d95a31a6395be7f6147abd52332cf1212cee9e869b84",
+      "bytes": 10969,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/Config.lua",
+      "sha256": "1702bf828cd4d9fb88f43058d10fc7ad4ee0f04f0e040a9e09802839018caf46",
+      "bytes": 57027,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/EmojiEditorBootstrap.lua",
+      "sha256": "70f200f29842d797f7aa14961e80b4e1abbf3df2a2c2ee3c34a20eb38035a8eb",
+      "bytes": 864,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/fx/GameAudio.lua",
+      "sha256": "cc6f967b87337fcb952760d70013898429907a4c01a4e499745008eb4eb00ce4",
+      "bytes": 3873,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/fx/Glow.lua",
+      "sha256": "fe20f5e22dbf3a7e1882d1f022dd348b69c100935e94bd331d1983c43b7c281e",
+      "bytes": 9080,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/fx/Particle.lua",
+      "sha256": "4122b9d90cc76b53c28ca8536eb0a661d52b67b449fe036d73225889965f10ee",
+      "bytes": 18163,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/fx/ScreenShake.lua",
+      "sha256": "70adf1a24056f8bcee753ac8c5d580cf9e748b20523870d234faaa8adf44f4af",
+      "bytes": 2859,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/main.lua",
+      "sha256": "5169c6b2feab9158aa3f55c6cb35781790f9c37bcb5117cfdb497962462da231",
+      "bytes": 153907,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/meta/Codex.lua",
+      "sha256": "e7084ae85b100770adc1fb4bdab68c97c1a3a1206a2eb0853e8cd1f8430b4118",
+      "bytes": 26633,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/meta/DailyChallenge.lua",
+      "sha256": "b62ac231c92ee1421c43fff4f6020cd40450b549fa30a89ef68d10f967fda29e",
+      "bytes": 8938,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/meta/RelicSystem.lua",
+      "sha256": "2b3c43f76db68f517125357b6e1e2bd428c146bf475af019106b199a79cc99ac",
+      "bytes": 4820,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/meta/RuneSystem.lua",
+      "sha256": "fa46770d19ec6300151b64708758af9e1c7a257bdce98e8ccfca9a0557f78d43",
+      "bytes": 10440,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/meta/SkinSystem.lua",
+      "sha256": "ce042b20f9f814bfe82e6d8beed3cefb584bc82e4f44c3090090d3d6ad719711",
+      "bytes": 13759,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/meta/TotemSystem.lua",
+      "sha256": "9dd5f21031d1493725e5c19b5fc9450237211366cb485da7888a71978e38f415",
+      "bytes": 20560,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/meta/WeeklyChallenge.lua",
+      "sha256": "1f71d6efe7b9e776f5239548402871fd2f80b890deb2ebd11c7a61a2b1dfc814",
+      "bytes": 23336,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/MockCloud.lua",
+      "sha256": "36bde70fd8782e9eb6af5eb30e056e25b095014876992af16369b210669a46e0",
+      "bytes": 9958,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/SaveData.lua",
+      "sha256": "21d8bd7f307b7698b6716bf400a741a6dd75ae9da87a7b33b99cfd75c42f3e41",
+      "bytes": 56212,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/social/Tombstone.lua",
+      "sha256": "1bc83541941c4aeba0364919e85dc2427cb1d1fad36ceb79ca36948cca001af2",
+      "bytes": 16454,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/ui/DamageNumber.lua",
+      "sha256": "daf8e9f4d3f008e5910e8435eeaf4e2c502648607ff0896f3359664fdaf333b0",
+      "bytes": 10940,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/ui/DamageStats.lua",
+      "sha256": "d7bb537f83f5845d9d8a845f8660a8971c92ccc359df151ee1c34f122aec8349",
+      "bytes": 7637,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/ui/GiftAd.lua",
+      "sha256": "71111a44adc5a4dd6f62a10e3a012c31d50a3b4901a0f8e76d1d788a2beeb545",
+      "bytes": 6162,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/ui/HUD.lua",
+      "sha256": "66cac031385077e224777528ca4474932da22552453918e27a3842db77c522ac",
+      "bytes": 67032,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/ui/Minimap.lua",
+      "sha256": "e18d2f774ab00b44bb9d53018728aa91baa7a0cd0fdcec85e2a4bf7548939209",
+      "bytes": 5919,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/ui/RelicShop.lua",
+      "sha256": "fbc924e29bf54b139d091fab0c21a97b9a4f751da8af8a9b0d2694294848a375",
+      "bytes": 14576,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/ui/RuneShop.lua",
+      "sha256": "3c98501b4d66508d0a20241f96e9af858ec97b2a38069abf5d27fb5b69e57ba4",
+      "bytes": 17589,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/ui/SkillSelect.lua",
+      "sha256": "823110ab75d4d0b53353e2046b4255f66478fa70ae86869377876fe943118726",
+      "bytes": 18983,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/ui/SkinShop.lua",
+      "sha256": "675fb3ce367322463640b8072a5110ef7c27c142b6b805d4ce09807faf740cbf",
+      "bytes": 17618,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/ui/TotemShop.lua",
+      "sha256": "68b13066c83e2589f9d2d81f5dbc1397b31a8c97267b200aec4b8bb143445c76",
+      "bytes": 34569,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/utils/FPSMonitor.lua",
+      "sha256": "ad2eaf3b8746a0149a8143fbaa7feb23687928a38c0a6765aae6710598052f46",
+      "bytes": 4550,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/utils/I18n.lua",
+      "sha256": "26d6b5fa61f874d0159e30266e4de6333d81ec6cc8627f25082f9b9e9584ebbc",
+      "bytes": 21599,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/utils/PerfQuality.lua",
+      "sha256": "6fa14dbf5711d071d72606c2f0e9ff3dc2daceef5d47631cc100b86eb26eb9dc",
+      "bytes": 3758,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/utils/SafeMath.lua",
+      "sha256": "c6c55de613117511fae81268188aa5f5126754d472340479c6a8cfcc6b56575d",
+      "bytes": 2842,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    },
+    {
+      "path": "scripts/utils/SpatialHash.lua",
+      "sha256": "df6e689a8fad8fa7b8e71f20cfb36f36d7b0f54ad6076598ec12fc7fcde2fb29",
+      "bytes": 3688,
+      "identical": true,
+      "syntaxPass": true,
+      "error": null
+    }
+  ],
+  "audio": [
+    {
+      "path": "audio/music_1774741474417.ogg",
+      "sha256": "9be62f59bb5c4256a616fc07d41b551c66593a000026d6c4e72533ad9ccfad89",
+      "identical": true
+    },
+    {
+      "path": "audio/sfx/bomb_explode.ogg",
+      "sha256": "380f53372717015700d85a1fe3a11d3270d34ac5c4b70019d3a8ce8127e220b2",
+      "identical": true
+    },
+    {
+      "path": "audio/sfx/boss_warning.ogg",
+      "sha256": "af2b372d1b3c9b84545a5d0ff9b512b52ad06482e0225cbb43d2b5a3f944ba7e",
+      "identical": true
+    },
+    {
+      "path": "audio/sfx/coin_pickup.ogg",
+      "sha256": "7ca2b582d616747f548af3ac29eac4c0e3d3fe015b2353e5e01aa170f3ff15c9",
+      "identical": true
+    },
+    {
+      "path": "audio/sfx/crit_hit.ogg",
+      "sha256": "c95c9a963b2fa9873dedd971a5fedcbb0f245597f05f8751bee27b9aee8e46ae",
+      "identical": true
+    },
+    {
+      "path": "audio/sfx/dodge_roll.ogg",
+      "sha256": "9f720b24378ae984a692086cb6f852ed5fa31c23c82793216b67ef052405adfe",
+      "identical": true
+    },
+    {
+      "path": "audio/sfx/enemy_die.ogg",
+      "sha256": "39231ea1011290ea9001df27e208bd3b5bd56317abb13faf89f315861117e0b6",
+      "identical": true
+    },
+    {
+      "path": "audio/sfx/explosion.ogg",
+      "sha256": "2fb1fb42a1ad9e74ceefa84763dbd27429763ecdcab0f9968515d26680519199",
+      "identical": true
+    },
+    {
+      "path": "audio/sfx/freeze.ogg",
+      "sha256": "18c20d167ffe8a2fb30f5cb695178ae739179a92eab4cde69adcfd02bb3c98da",
+      "identical": true
+    },
+    {
+      "path": "audio/sfx/heal.ogg",
+      "sha256": "43337d540f53c46ef02b34ba569436e5e2ba742e3d138342a18638492331e148",
+      "identical": true
+    },
+    {
+      "path": "audio/sfx/levelup.ogg",
+      "sha256": "7c5cc789afc18bbe12f7fd08d10d99412d7b383aca89f693cd00ab8f93ced1ea",
+      "identical": true
+    },
+    {
+      "path": "audio/sfx/overload_activate.ogg",
+      "sha256": "2da58316bc71c45c35520d169071a347e640140581c4332f996d1af01ce2f5d3",
+      "identical": true
+    },
+    {
+      "path": "audio/sfx/pickup.ogg",
+      "sha256": "f0e228c6525a95adff469cf98b6132c36c6ab7f27420e7c8a6df46d27971b6df",
+      "identical": true
+    },
+    {
+      "path": "audio/sfx/player_hurt.ogg",
+      "sha256": "953bead1494bfd586c826a2b80e93fe070d0c0122da5b836a7ff3219e0b3df22",
+      "identical": true
+    },
+    {
+      "path": "audio/sfx/shield_up.ogg",
+      "sha256": "d2878a7b475b8cf55edc892627ed4f22a3f9f75b9bf15ccbf0ed396ca7be8afd",
+      "identical": true
+    },
+    {
+      "path": "audio/sfx/shoot.ogg",
+      "sha256": "9af4869feb64baf5b19483fd429957e7cd06a411c8bbcb75d1d6d7acde4fbfde",
+      "identical": true
+    },
+    {
+      "path": "audio/sfx/skill_select.ogg",
+      "sha256": "91a7c36f19d8a5a4260f172072eae3f56bfb7ccd6f9052bf7c61eed57a23d12e",
+      "identical": true
+    },
+    {
+      "path": "audio/sfx/wave_start.ogg",
+      "sha256": "3ae6cdb4b6d99e2b573ad2ebb9ad181822593367b3fc8f7a90b600188b379464",
+      "identical": true
+    }
+  ]
+}

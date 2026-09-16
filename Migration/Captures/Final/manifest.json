@@ -1,0 +1,128 @@
+[
+  {
+    "name": "01-title",
+    "state": 0,
+    "error": "",
+    "path": "C:\\Test\\Emoji_Survivor_Unity_Test\\Emoji_Survivor_Test\\Migration\\Captures\\Final\\01-title.png"
+  },
+  {
+    "name": "01b-leaderboard",
+    "state": 5,
+    "error": "",
+    "path": "C:\\Test\\Emoji_Survivor_Unity_Test\\Emoji_Survivor_Test\\Migration\\Captures\\Final\\01b-leaderboard.png"
+  },
+  {
+    "name": "02-nickname",
+    "state": 4,
+    "error": "",
+    "path": "C:\\Test\\Emoji_Survivor_Unity_Test\\Emoji_Survivor_Test\\Migration\\Captures\\Final\\02-nickname.png"
+  },
+  {
+    "name": "03-cat",
+    "state": 3,
+    "error": "",
+    "path": "C:\\Test\\Emoji_Survivor_Unity_Test\\Emoji_Survivor_Test\\Migration\\Captures\\Final\\03-cat.png"
+  },
+  {
+    "name": "04-bean",
+    "state": 3,
+    "error": "",
+    "path": "C:\\Test\\Emoji_Survivor_Unity_Test\\Emoji_Survivor_Test\\Migration\\Captures\\Final\\04-bean.png"
+  },
+  {
+    "name": "05-monkey",
+    "state": 3,
+    "error": "",
+    "path": "C:\\Test\\Emoji_Survivor_Unity_Test\\Emoji_Survivor_Test\\Migration\\Captures\\Final\\05-monkey.png"
+  },
+  {
+    "name": "06-hand",
+    "state": 3,
+    "error": "",
+    "path": "C:\\Test\\Emoji_Survivor_Unity_Test\\Emoji_Survivor_Test\\Migration\\Captures\\Final\\06-hand.png"
+  },
+  {
+    "name": "07-leaf",
+    "state": 3,
+    "error": "",
+    "path": "C:\\Test\\Emoji_Survivor_Unity_Test\\Emoji_Survivor_Test\\Migration\\Captures\\Final\\07-leaf.png"
+  },
+  {
+    "name": "08-otto",
+    "state": 3,
+    "error": "",
+    "path": "C:\\Test\\Emoji_Survivor_Unity_Test\\Emoji_Survivor_Test\\Migration\\Captures\\Final\\08-otto.png"
+  },
+  {
+    "name": "09-achievements",
+    "state": 6,
+    "error": "",
+    "path": "C:\\Test\\Emoji_Survivor_Unity_Test\\Emoji_Survivor_Test\\Migration\\Captures\\Final\\09-achievements.png"
+  },
+  {
+    "name": "10-relics",
+    "state": 7,
+    "error": "",
+    "path": "C:\\Test\\Emoji_Survivor_Unity_Test\\Emoji_Survivor_Test\\Migration\\Captures\\Final\\10-relics.png"
+  },
+  {
+    "name": "11-totems",
+    "state": 8,
+    "error": "",
+    "path": "C:\\Test\\Emoji_Survivor_Unity_Test\\Emoji_Survivor_Test\\Migration\\Captures\\Final\\11-totems.png"
+  },
+  {
+    "name": "12-runes",
+    "state": 9,
+    "error": "",
+    "path": "C:\\Test\\Emoji_Survivor_Unity_Test\\Emoji_Survivor_Test\\Migration\\Captures\\Final\\12-runes.png"
+  },
+  {
+    "name": "13-skins",
+    "state": 10,
+    "error": "",
+    "path": "C:\\Test\\Emoji_Survivor_Unity_Test\\Emoji_Survivor_Test\\Migration\\Captures\\Final\\13-skins.png"
+  },
+  {
+    "name": "14-codex",
+    "state": 11,
+    "error": "",
+    "path": "C:\\Test\\Emoji_Survivor_Unity_Test\\Emoji_Survivor_Test\\Migration\\Captures\\Final\\14-codex.png"
+  },
+  {
+    "name": "15-weekly",
+    "state": 12,
+    "error": "",
+    "path": "C:\\Test\\Emoji_Survivor_Unity_Test\\Emoji_Survivor_Test\\Migration\\Captures\\Final\\15-weekly.png"
+  },
+  {
+    "name": "16-battle",
+    "state": 1,
+    "error": "",
+    "path": "C:\\Test\\Emoji_Survivor_Unity_Test\\Emoji_Survivor_Test\\Migration\\Captures\\Final\\16-battle.png"
+  },
+  {
+    "name": "17-skills",
+    "state": 1,
+    "error": "",
+    "path": "C:\\Test\\Emoji_Survivor_Unity_Test\\Emoji_Survivor_Test\\Migration\\Captures\\Final\\17-skills.png"
+  },
+  {
+    "name": "18-pause",
+    "state": 1,
+    "error": "",
+    "path": "C:\\Test\\Emoji_Survivor_Unity_Test\\Emoji_Survivor_Test\\Migration\\Captures\\Final\\18-pause.png"
+  },
+  {
+    "name": "19-boss",
+    "state": 1,
+    "error": "",
+    "path": "C:\\Test\\Emoji_Survivor_Unity_Test\\Emoji_Survivor_Test\\Migration\\Captures\\Final\\19-boss.png"
+  },
+  {
+    "name": "20-settlement",
+    "state": 2,
+    "error": "",
+    "path": "C:\\Test\\Emoji_Survivor_Unity_Test\\Emoji_Survivor_Test\\Migration\\Captures\\Final\\20-settlement.png"
+  }
+]
