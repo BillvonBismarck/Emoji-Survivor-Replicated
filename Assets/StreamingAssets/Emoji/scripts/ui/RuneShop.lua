@@ -234,7 +234,7 @@ function RuneShop.Render(vg, fontId, DESIGN_W, DESIGN_H)
     local cellH = cellW  -- 正方形格子
 
     -- 底部详情面板高度
-    local detailH = selectedRuneId and 200 or 0
+    local detailH = selectedRuneId and (I18n.lang == "en" and 240 or 200) or 0
 
     -- 滚动区域
     local gridAreaTop = curY
@@ -358,14 +358,14 @@ function RuneShop.Render(vg, fontId, DESIGN_W, DESIGN_H)
             nvgFillColor(vg, nvgRGBA(230, 210, 210, 230))
             nvgTextAlign(vg, NVG_ALIGN_LEFT + NVG_ALIGN_TOP)
             nvgTextBox(vg, px, py, DESIGN_W - px * 2, rune.desc)
-            py = py + 44
+            py = py + (I18n.lang == "en" and 80 or 44)
 
             local owned = SaveData.ownedRunes[rune.id] == true
             local equipped = IsRuneEquipped(rune.id)
 
             if not owned then
                 nvgFontSize(vg, 15)
-                nvgFillColor(vg, nvgRGBA(120, 80, 80, 180))
+                nvgFillColor(vg, nvgRGBA(210, 175, 175, 230))
                 nvgTextAlign(vg, NVG_ALIGN_LEFT + NVG_ALIGN_TOP)
                 nvgText(vg, px, py, I18n.t("rune_locked"))
             elseif equipped then

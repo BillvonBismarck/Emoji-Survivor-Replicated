@@ -441,13 +441,8 @@ end
 --- 是否存在游戏存档
 ---@return boolean
 function SaveData.HasGameSave()
-    if not cjson then return false end
-    if not fileSystem:FileExists(GAMESAVE_FILE) then return false end
-    local file = File(GAMESAVE_FILE, FILE_READ)
-    if not file:IsOpen() then return false end
-    local content = file:ReadString()
-    file:Close()
-    return content ~= nil and content ~= ""
+    if SaveData._hasGameSave == nil then SaveData._hasGameSave = SaveData.LoadGame() ~= nil end
+    return SaveData._hasGameSave
 end
 
 --- 保存当前游戏状态
@@ -455,92 +450,23 @@ end
 ---@param Wave table Wave 模块
 ---@param Skill table Skill 模块
 ---@param Loot table Loot 模块
-function SaveData.SaveGame(Player, Wave, Skill, Loot)
-    if not cjson then return end
-
-    local data = {
-        version = 1,
-
-        -- Player 核心状态
-        player = {
-            charId = Player.charId,
-            x = Player.x,
-            y = Player.y,
-            hp = Player.hp,
-            maxHp = Player.maxHp,
-            level = Player.level,
-            exp = Player.exp,
-            expToNext = Player.expToNext,
-            kills = Player.kills,
-            skills = Player.skills,
-
-            -- 过载
-            overloadKills = Player.overloadKills,
-            overloadActive = Player.overloadActive,
-            overloadTimer = Player.overloadTimer,
-
-            -- 攻击
-            attackTimer = Player.attackTimer,
-            attackInterval = Player.attackInterval,
-            extraBullets = Player.extraBullets,
-            pierceCount = Player.pierceCount,
-            bounceCount = Player.bounceCount,
-
-            -- 防御
-            invTimer = Player.invTimer,
-            guardianCharges = Player.guardianCharges,
-            shieldCharges = Player.shieldCharges,
-            shieldTimer = Player.shieldTimer,
-            shieldInterval = Player.shieldInterval,
-            regenRate = Player.regenRate,
-
-            -- 毕业
-            graduationPhase = Player.graduationPhase,
-            droneCollisionDmg = Player.droneCollisionDmg,
-            rageActive = Player.rageActive,
-            rageTimer = Player.rageTimer,
-
-            -- 技能被动加成
-            atkBonus = Player.atkBonus,
-            hpBonus = Player.hpBonus,
-            speedBonus = Player.speedBonus,
-            critBonus = Player.critBonus,
-            magnetBonus = Player.magnetBonus,
-            fireRateBonus = Player.fireRateBonus,
-            knockbackChance = Player.knockbackChance,
-            knockbackForce = Player.knockbackForce,
-            bigBulletChance = Player.bigBulletChance,
-            homingChance = Player.homingChance,
-            lootBonus = Player.lootBonus,
-        },
-
-        -- Wave 状态
-        wave = {
-            waveNum = Wave.waveNum,
-            timer = Wave.timer,
-            totalTime = Wave.totalTime,
-            waveCoeff = Wave.waveCoeff,
-            bossAlive = Wave.bossAlive,
-            spawnTimer = Wave.spawnTimer,
-        },
-
-        -- Skill 完整状态（计时器 + 运行时实体）
-        skill = Skill.ExportState(),
-
-        -- Loot 状态
-        loot = {
-            magnetBoostTimer = Loot.magnetBoostTimer,
-            magnetBoostRange = Loot.magnetBoostRange,
-            lastGiftWave = Loot.lastGiftWave,
-        },
-    }
-
-    local file = File(GAMESAVE_FILE, FILE_WRITE)
-    if file:IsOpen() then
-        file:WriteString(cjson.encode(data))
-        file:Close()
-        print("[SaveData] Game saved at wave " .. Wave.waveNum)
-    end
+function SaveData.SaveGame(Player, Wave, Skill, Loot, metadata)
+    local ok, err = pcall(function()
+        assert(cjson, "JSON unavailable")
+        assert(Player.hp > 0, "Cannot save a completed run")
+        local data = {version=2,player={charId=Player.charId,hp=Player.hp},
+            run=require("battle.RunSnapshot").Capture(metadata)}
+        local encoded=cjson.encode(data)
+        local file=File(GAMESAVE_FILE,FILE_WRITE)
+        assert(file:IsOpen(),"Cannot open save file")
+        file:WriteString(encoded);file:Close()
+        local check=File(GAMESAVE_FILE,FILE_READ)
+        assert(check:IsOpen(),"Cannot verify save file")
+        local content=check:ReadString();check:Close()
+        assert(content==encoded,"Save write verification failed")
+    end)
+    if ok then SaveData._hasGameSave=true;return true end
+    print("[SaveGame] "..tostring(err));return false, tostring(err)
 end
 
 --- 读取游戏存档
@@ -555,7 +481,13 @@ function SaveData.LoadGame()
     local ok2, data = pcall(cjson.decode, file:ReadString())
     file:Close()
 
-    if ok2 and type(data) == "table" and data.version == 1 then
+    if ok2 and type(data) == "table" and (data.version == 1 or data.version == 2)
+        and type(data.player)=="table" and type(data.player.hp)=="number" and data.player.hp>0
+        and require("Config").GetCharacter(data.player.charId) then
+        if data.version==2 then
+            local valid=pcall(function()local S=require("battle.RunSnapshot");S.Validate(S.Unpack(data.run))end)
+            if not valid then return nil end
+        end
         return data
     end
 
@@ -654,6 +586,7 @@ end
 
 --- 删除游戏存档
 function SaveData.DeleteSave()
+    SaveData._hasGameSave=false
     if fileSystem:FileExists(GAMESAVE_FILE) then
         local file = File(GAMESAVE_FILE, FILE_WRITE)
         if file:IsOpen() then

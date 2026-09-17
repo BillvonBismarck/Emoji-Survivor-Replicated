@@ -241,4 +241,12 @@ function DamageStats.RenderPieChart(vg, cx, cy, radius, font, textFont)
     return math.max(radius * 2, #slices * legendLineH)
 end
 
+function DamageStats.ExportRunState()
+ return {dmgData=dmgData,totalDmg=totalDmg}
+end
+function DamageStats.ImportRunState(data)
+ dmgData=data.dmgData
+ totalDmg=data.totalDmg
+end
+
 return DamageStats

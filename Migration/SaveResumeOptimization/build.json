@@ -1,0 +1,1 @@
+{"job_id":"build-68016f89bc","result":"succeeded","platform":"StandaloneWindows64","duration_seconds":3.7201488,"total_size_mb":169.12,"errors":0,"warnings":1,"warning":"No RuntimePipelineConfig asset found; optional Pipeline disabled in Player builds"}

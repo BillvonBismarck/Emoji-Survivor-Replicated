@@ -1,0 +1,80 @@
+[
+  {
+    "name": "title",
+    "state": 0,
+    "error": "",
+    "callback": ""
+  },
+  {
+    "name": "characters",
+    "state": 3,
+    "error": "",
+    "callback": ""
+  },
+  {
+    "name": "weekly",
+    "state": 12,
+    "error": "",
+    "callback": ""
+  },
+  {
+    "name": "weekly-hero",
+    "state": 3,
+    "error": "",
+    "callback": ""
+  },
+  {
+    "name": "pause",
+    "state": 1,
+    "error": "",
+    "callback": ""
+  },
+  {
+    "name": "totems",
+    "state": 8,
+    "error": "",
+    "callback": ""
+  },
+  {
+    "name": "totem-detail",
+    "state": 8,
+    "error": "",
+    "callback": ""
+  },
+  {
+    "name": "runes",
+    "state": 9,
+    "error": "",
+    "callback": ""
+  },
+  {
+    "name": "rune-detail",
+    "state": 9,
+    "error": "",
+    "callback": ""
+  },
+  {
+    "name": "relics",
+    "state": 7,
+    "error": "",
+    "callback": ""
+  },
+  {
+    "name": "skins",
+    "state": 10,
+    "error": "",
+    "callback": ""
+  },
+  {
+    "name": "codex",
+    "state": 11,
+    "error": "",
+    "callback": ""
+  },
+  {
+    "name": "achievements",
+    "state": 6,
+    "error": "",
+    "callback": ""
+  }
+]

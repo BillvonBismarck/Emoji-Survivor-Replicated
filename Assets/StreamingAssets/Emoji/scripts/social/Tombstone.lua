@@ -356,7 +356,7 @@ function Tombstone.Render(vg, camX, camY, viewW, viewH, gameTime)
                 -- 名字标签
                 nvgFontSize(vg, 12)
                 nvgFillColor(vg, nvgRGBA(200, 180, 255, 220))
-                nvgText(vg, sx, sy + floatY - 38, (tomb.nickname or "旅人"))
+                nvgUserText(vg, sx, sy + floatY - 38, (tomb.nickname or "旅人"))
 
                 -- "靠近查看" 提示
                 if not showingDetail then
@@ -423,12 +423,12 @@ function Tombstone.RenderDetail(vg, camX, camY, viewW, viewH)
     -- 遗言内容
     nvgFontSize(vg, 13)
     nvgFillColor(vg, nvgRGBA(255, 255, 255, alpha))
-    nvgText(vg, bubbleX, bubbleY - 16, "「" .. tomb.msg .. "」")
+    nvgUserText(vg, bubbleX, bubbleY - 16, "「" .. tomb.msg .. "」")
 
     -- 玩家信息行
     nvgFontSize(vg, 10)
     nvgFillColor(vg, nvgRGBA(180, 160, 255, math.floor(fadeAlpha * 180)))
-    local infoLine = string.format("%s %s · 第%d波 · %d击杀",
+    local infoLine = string.format(require("utils.I18n").Localize("%s %s · 第%d波 · %d击杀"),
         tomb.charEmoji, tomb.nickname or "旅人", tomb.wave, tomb.kills)
     nvgText(vg, bubbleX, bubbleY + 6, infoLine)
 

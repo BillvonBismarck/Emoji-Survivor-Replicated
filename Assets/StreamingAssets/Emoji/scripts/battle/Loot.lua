@@ -139,7 +139,7 @@ function Loot.CalcCoinDropChance()
     -- 1) 基础掉率 = 初始值 + 金币图腾 + 掉落图腾（加算）
     local base = Config.LOOT.coinChance
     if Player then
-        base = base + (Player.totemLootBonus or 0)
+        base = base + (Player.totemLootBonus or 0) + (Player.totemGoldDropBonus or 0)
     end
 
     -- 2) 波次缩放：乘算，每波 +8%（第13波 ×2.0，第25波 ×3.0）

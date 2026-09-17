@@ -217,7 +217,7 @@ function WC.GetWeekPreview()
             dayName   = dayNames[d],
             rule      = rule,
             isCurrent = (d == currentDay),
-            bestWave  = WC.dailyPlayed[d] or 0,
+            bestWave  = WC.dailyPlayed[tostring(d)] or WC.dailyPlayed[d] or 0,
         }
     end
     return preview
@@ -231,15 +231,18 @@ end
 ---@param wave number 达到的波次
 ---@return number pointsEarned, number totalPoints
 function WC.RecordResult(wave)
-    local _, dayIndex = WC.GetSeasonInfo()
-    local prevBest = WC.dailyPlayed[dayIndex] or 0
+    local currentSeason, dayIndex = WC.GetSeasonInfo()
+    if WC.runSeasonId and WC.runSeasonId ~= currentSeason then return 0, WC.seasonPoints end
+    dayIndex=WC.runDay or dayIndex
+    local prevBest = WC.dailyPlayed[tostring(dayIndex)] or WC.dailyPlayed[dayIndex] or 0
 
     -- 只有超过当日最佳才获得额外积分
     local basePoints = wave  -- 基础积分 = 波次
     local bonusPoints = 0
     if wave > prevBest then
         bonusPoints = math.floor((wave - prevBest) * 0.5)
-        WC.dailyPlayed[dayIndex] = wave
+        WC.dailyPlayed[tostring(dayIndex)] = wave
+        WC.dailyPlayed[dayIndex] = nil
     end
 
     local earned = basePoints + bonusPoints
@@ -306,6 +309,7 @@ function WC.Load()
     if not ok2 or not data then return end
 
     local currentSeason = WC.GetSeasonInfo()
+    WC.lastSeasonReward = data.lastSeasonReward
     if data.seasonId == currentSeason then
         -- 同赛季，恢复进度
         WC.seasonPoints = data.seasonPoints or 0
@@ -318,7 +322,7 @@ function WC.Load()
                 WC.lastSeasonReward = {
                     seasonId = data.seasonId,
                     points   = data.seasonPoints,
-                    gold     = totalGold,
+                    gold     = totalGold + ((WC.lastSeasonReward and not WC.lastSeasonReward.claimed) and WC.lastSeasonReward.gold or 0),
                     rewards  = reached,
                     claimed  = false,
                 }
@@ -326,6 +330,8 @@ function WC.Load()
         end
         WC.seasonPoints = 0
         WC.dailyPlayed  = {}
+        WC.seasonId = currentSeason
+        WC.Save() -- migration and pending reward are persisted together
     end
     print("[WeeklyChallenge] Loaded: season=" .. currentSeason
         .. " pts=" .. WC.seasonPoints)
@@ -337,6 +343,7 @@ function WC.Save()
         seasonId     = WC.seasonId,
         seasonPoints = WC.seasonPoints,
         dailyPlayed  = WC.dailyPlayed,
+        lastSeasonReward = WC.lastSeasonReward,
     }
     local file = File(SAVE_FILE, FILE_WRITE)
     if file:IsOpen() then
@@ -395,7 +402,9 @@ function WC.Init()
 end
 
 function WC.Reset()
+    WC.runSeasonId=nil;WC.runDay=nil
     WC.active = false
+    WC.todayRule=nil
 end
 
 --- 领取上赛季奖励

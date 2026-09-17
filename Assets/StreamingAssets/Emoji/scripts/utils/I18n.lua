@@ -14,6 +14,11 @@ I18n.LANG_LABELS = { zh = "中文", en = "EN" }
 
 -- ========== 翻译表 ==========
 local strings = {
+    pause_suspend = {zh="存档并退出",en="Save & Exit"},
+    pause_save_failed = {zh="存档失败，请重试",en="Save failed. Please retry."},
+    pause_volume = {zh = "总音量 %d%%", en = "Volume %d%%"},
+    pause_mute = {zh = "静音", en = "Mute"},
+    pause_unmute = {zh = "取消静音", en = "Unmute"},
     -- ===== 暂停菜单 =====
     pause_title           = { zh = "PAUSED",           en = "PAUSED" },
     pause_resume          = { zh = "继续游戏",          en = "Resume" },
@@ -30,7 +35,7 @@ local strings = {
     pause_off             = { zh = "关闭",              en = "OFF" },
     pause_on              = { zh = "开启",              en = "ON" },
     pause_lang            = { zh = "🌐 语言",           en = "🌐 Lang" },
-    pause_save_exit       = { zh = "📊 结算退出",       en = "📊 Exit" },
+    pause_save_exit       = { zh = "📊 结算退出",       en = "📊 Settle & Exit" },
 
     -- ===== 结算屏 =====
     result_victory        = { zh = "大获全胜！",        en = "VICTORY!" },
@@ -160,7 +165,7 @@ local strings = {
     totem_bonus_prefix    = { zh = "加成: ",            en = "Bonus: " },
     totem_bonus_crit      = { zh = "暴击+%d%%",         en = "Crit+%d%%" },
     totem_bonus_firerate  = { zh = "射速+%d%%",         en = "ASpd+%d%%" },
-    totem_bonus_regen     = { zh = "再生+%.1f%%/s",     en = "Regen+%.1f%%/s" },
+    totem_bonus_gold      = { zh = "金币基础掉率+%.1f%%", en = "Base coin chance +%.1f%%" },
     totem_bonus_loot      = { zh = "掉落+%d%%",         en = "Loot+%d%%" },
     totem_btn_unequip     = { zh = "卸下",              en = "Remove" },
     totem_btn_equip       = { zh = "装备",              en = "Equip" },
@@ -208,9 +213,9 @@ local strings = {
     card_gold_badge       = { zh = "🪙 %d",               en = "🪙 %d" },
 
     -- ===== 主界面标题 =====
-    game_title            = { zh = "emoji 英雄战斗",         en = "Emoji Hero Battle" },
-    game_welcome          = { zh = "欢迎来到 emoji 英雄战斗！", en = "Welcome to Emoji Hero Battle!" },
-    game_version          = { zh = "v2.0 - emoji 英雄战斗",  en = "v2.0 - Emoji Hero Battle" },
+    game_title            = { zh = "Emoji幸存者",         en = "Emoji Survivor" },
+    game_welcome          = { zh = "欢迎来到 Emoji幸存者！", en = "Welcome to Emoji Survivor!" },
+    game_version          = { zh = "v2.0 - Emoji幸存者",  en = "v2.0 - Emoji Survivor" },
 
     -- ===== 角色选择 =====
     charsel_start         = { zh = "开始战斗！",           en = "Start Battle!" },
@@ -313,6 +318,42 @@ function I18n.NextLang()
         end
     end
     I18n.lang = "zh"
+end
+
+-- Longest-match translation also supports labels composed from static fragments.
+local english = require("utils.English")
+local trie = {}
+for source, target in pairs(english) do
+    local node = trie
+    for i = 1, #source do local b = source:byte(i); node[b] = node[b] or {}; node = node[b] end
+    node.value = target
+end
+local cache, cacheCount = {}, 0
+I18n.untranslated = {}
+local function hasChinese(text)
+    for _, cp in utf8.codes(text) do if cp >= 0x4e00 and cp <= 0x9fff then return true end end
+    return false
+end
+function I18n.Localize(text)
+    text = tostring(text)
+    if I18n.lang ~= "en" or not hasChinese(text) then return text end
+    if english[text] then return english[text] end
+    if cache[text] then return cache[text] end
+    local parts, i = {}, 1
+    while i <= #text do
+        local node, j, last, value = trie, i, nil, nil
+        while j <= #text and node[text:byte(j)] do
+            node = node[text:byte(j)]; j = j + 1
+            if node.value then last, value = j, node.value end
+        end
+        if value then parts[#parts+1] = value; i = last
+        else parts[#parts+1] = text:sub(i,i); i = i+1 end
+    end
+    local translated = table.concat(parts)
+    if hasChinese(translated) then I18n.untranslated[text] = translated end
+    if cacheCount >= 2048 then cache, cacheCount = {}, 0 end
+    cache[text] = translated; cacheCount = cacheCount + 1
+    return translated
 end
 
 return I18n

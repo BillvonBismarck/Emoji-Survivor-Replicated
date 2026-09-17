@@ -1,0 +1,12 @@
+{
+  "samples": 240,
+  "renderMedianMs": 56.002100000000006,
+  "renderP95Ms": 70.1485,
+  "frameMedianMs": 61.2482987344265,
+  "frameP95Ms": 74.935600161552429,
+  "enemies": 58.0,
+  "enemyBullets": 6.0,
+  "playerBullets": 0.0,
+  "missing": 0,
+  "error": ""
+}

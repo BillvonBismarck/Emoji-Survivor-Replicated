@@ -79,7 +79,7 @@ TotemSystem.TYPE_CONFIG = {
     spd       = { name = "速度",     icon = "👟",  desc = "初始SPD",       category = "stat" },
     crit      = { name = "暴击",     icon = "🎯",  desc = "暴击率",        category = "stat", unit = "%" },
     fire_rate = { name = "射速",     icon = "🔥",  desc = "攻击间隔降低",  category = "stat", unit = "%" },
-    hp_regen  = { name = "掘金",     icon = "🪙",  desc = "金币掉取率",    category = "stat", unit = "%" },
+    hp_regen  = { name = "掘金", icon = "🪙", desc = "金币基础掉率", category = "stat", unit = "%" },
     loot      = { name = "幸运",     icon = "🍀",  desc = "掉落率提升",    category = "stat", unit = "%" },
     -- 技能类（icon 与 Config.SKILLS 保持一致）
     atk_up    = { name = "攻击提升", icon = "⚔️", desc = "开局携带一级攻击提升", category = "skill" },
@@ -162,7 +162,7 @@ local VALUE_TABLE = {
         spd       = 30,
         crit      = 5,      -- +5% 暴击率
         fire_rate = 5,      -- 攻击间隔-5%
-        hp_regen  = 10,     -- 金币掉取率+10%
+        hp_regen  = 10,     -- 金币基础掉率+10%
         loot      = 8,      -- 掉落率+8%
     },
     rare = {
@@ -171,7 +171,7 @@ local VALUE_TABLE = {
         spd       = 80,
         crit      = 12,     -- +12%
         fire_rate = 12,     -- -12%
-        hp_regen  = 20,     -- 金币掉取率+20%
+        hp_regen  = 20,     -- 金币基础掉率+20%
         loot      = 18,     -- +18%
     },
     legendary = {
@@ -180,7 +180,7 @@ local VALUE_TABLE = {
         spd       = 200,
         crit      = 25,     -- +25%
         fire_rate = 25,     -- -25%
-        hp_regen  = 35,     -- 金币掉取率+35%
+        hp_regen  = 35,     -- 金币基础掉率+35%
         loot      = 25,     -- +25%
     },
 }
@@ -243,6 +243,10 @@ function TotemSystem.GetTotemName(typeId, rarity)
     local rc = TotemSystem.RARITY_CONFIG[rarity]
     local tc = TotemSystem.TYPE_CONFIG[typeId]
     if not rc or not tc then return "未知图腾" end
+    local I18n = require("utils.I18n")
+    if I18n.lang == "en" then
+        return I18n.Localize(rc.name):gsub("%s+$", "") .. " " .. I18n.Localize(tc.name) .. " Totem"
+    end
     return rc.name .. tc.name .. "图腾"
 end
 
@@ -431,7 +435,8 @@ function TotemSystem.CalcEquippedBonuses(equippedTotems)
         -- 百分比数值加成（来自stat图腾）
         critBonus     = 0,    -- 暴击率加成（百分比，如 0.03 = +3%）
         fireRateBonus = 0,    -- 攻击间隔降低（百分比）
-        hpRegenBonus  = 0,    -- 每秒恢复最大HP百分比
+        hpRegenBonus  = 0,    -- retained for old save compatibility; no totem grants regeneration
+        goldDropBonus = 0,    -- additive base coin-drop probability
         lootBonus     = 0,    -- 掉落率提升百分比
         -- 技能类
         skillTotems   = {},
@@ -455,7 +460,7 @@ function TotemSystem.CalcEquippedBonuses(equippedTotems)
                 elseif t.typeId == "fire_rate" then
                     bonuses.fireRateBonus = bonuses.fireRateBonus + val / 100
                 elseif t.typeId == "hp_regen" then
-                    bonuses.hpRegenBonus = bonuses.hpRegenBonus + val / 100
+                    bonuses.goldDropBonus = bonuses.goldDropBonus + val / 100
                 elseif t.typeId == "loot" then
                     bonuses.lootBonus = bonuses.lootBonus + val / 100
                 end

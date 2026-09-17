@@ -1,0 +1,8 @@
+state=0 frames=450 error= root=(x:0.00, y:0.00, width:720.00, height:1280.00)
+m_AtlasBlitShader=Hidden/Internal-UIRAtlasBlitCopy
+m_DefaultShader=Hidden/Internal-UIRDefault
+m_RuntimeGaussianBlurShader=Hidden/UIR/GaussianBlur
+m_RuntimeColorEffectShader=Hidden/UIR/ColorEffect
+m_SDFShader=Hidden/TextCore/Distance Field SSD
+m_BitmapShader=Hidden/Internal-GUITextureClipText
+m_SpriteShader=Hidden/TextCore/Sprite

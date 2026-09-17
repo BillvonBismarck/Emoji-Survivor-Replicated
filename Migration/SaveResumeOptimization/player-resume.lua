@@ -1,0 +1,5 @@
+assert(require('SaveData').HasGameSave(),'Disk save missing')
+gameState=0;UnityRender();HandleScreenTouch(360,275)
+local P=require('battle.Player');local E=require('battle.Enemy');local W=require('battle.Wave');local B=require('battle.BattleScene')
+assert(gameState==1 and P.hp==73 and P.level==27 and W.waveNum==40 and W.bossAlive and E.currentBoss.hp==321 and B.sessionGold==127,'Disk restore mismatch')
+require('ui.HUD').paused=true;print('[DiskResumeTest] RESUME PASS')

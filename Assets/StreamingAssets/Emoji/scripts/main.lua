@@ -80,7 +80,9 @@ local physH = 0
 
 -- 游戏状态
 local STATE_TITLE = 0
+local pendingAutoSave = false
 local STATE_CHAR_SELECT = 3
+local charSelectMode = "normal"
 local STATE_PLAYING = 1
 local STATE_OVER = 2
 local STATE_NICKNAME = 4
@@ -232,7 +234,7 @@ end
 -- ============================================================================
 
 function Start()
-    graphics.windowTitle = "emoji 英雄战斗"
+    graphics.windowTitle = "Emoji Survivor"
 
     -- 预览环境 Mock（真机有 clientCloud 时自动跳过）
     MockCloud.Install()
@@ -603,6 +605,7 @@ local function SetupBattleCallbacks()
 
     -- 游戏结束回调
     BattleScene.onGameOver = function(isVictory, stats)
+        pendingAutoSave=false
         gameState = STATE_OVER
         gameOverVictory = isVictory
         gameOverStats = stats
@@ -755,7 +758,16 @@ local function SetupBattleCallbacks()
 
     -- 过波自动存档
     Wave.onWaveComplete = function(waveNum)
-        SaveData.SaveGame(Player, Wave, Skill, Loot)
+        pendingAutoSave = true
+    end
+
+    HUD.onSuspend = function()
+        local ok = SaveData.SaveGame(Player, Wave, Skill, Loot, {hasUsedRevive=hasUsedRevive})
+        if not ok then HUD.saveMessage=I18n.t("pause_save_failed");return end
+        pendingAutoSave=false;HUD.paused=false;HUD.audioDragging=false;HUD.saveMessage=nil
+        SkillSelect.Hide();SkillSelect.HideUltimate();GiftAd.visible=false
+        DailyChallenge.Reset();WeeklyChallenge.Reset()
+        gameState=STATE_TITLE
     end
 
     -- 结算退出回调（触发正常结算流程，视为非胜利结束）
@@ -770,6 +782,7 @@ local function SetupBattleCallbacks()
 end
 
 local function StartBattle()
+    pendingAutoSave=false;HUD.saveMessage=nil
     DailyChallenge.Reset()  -- 确保普通战斗不受每日挑战影响
     WeeklyChallenge.Reset() -- 确保普通战斗不受周挑战影响
     gameState = STATE_PLAYING
@@ -798,6 +811,8 @@ end
 
 --- 开始每日挑战
 local function StartDailyChallenge()
+    pendingAutoSave=false;HUD.saveMessage=nil
+    WeeklyChallenge.Reset()
     -- 激活每日挑战
     local cfg = DailyChallenge.GetTodayConfig()
     DailyChallenge.active = true
@@ -827,6 +842,7 @@ end
 
 --- 开始周挑战
 local function StartWeeklyChallenge()
+    pendingAutoSave=false;HUD.saveMessage=nil
     local rule = WeeklyChallenge.GetTodayRule()
     WeeklyChallenge.active = true
 
@@ -873,6 +889,27 @@ local function ResumeBattle()
     DamageNumber.Reset()
     Particle.Reset()
 
+    if saveData.version == 2 then
+        local Snapshot=require("battle.RunSnapshot")
+        local ok,err=pcall(function()
+            local root=Snapshot.Unpack(saveData.run)
+            Snapshot.Prepare(root)
+            selectedCharId=saveData.player.charId
+            BattleScene.Init(selectedCharId, true)
+            BattleScene.ResetErrors()
+            Snapshot.Restore(root)
+            SetupBattleCallbacks()
+            hasUsedRevive=root.metadata and root.metadata.hasUsedRevive or false
+            HUD.paused=false;HUD.saveMessage=nil;pendingAutoSave=false
+            SkillSelect.Hide();SkillSelect.HideUltimate();GiftAd.visible=false
+            if BattleScene.state==BattleScene.STATE_SKILL_SELECT then BattleScene.onLevelUp(BattleScene.skillChoices) end
+            if BattleScene.state==BattleScene.STATE_ULTIMATE_SELECT then BattleScene.onUltimateSelect() end
+            if BattleScene.state==BattleScene.STATE_GIFT_AD then BattleScene.onGiftPickup() end
+        end)
+        if not ok then print("[Resume] "..tostring(err));gameState=STATE_TITLE end
+        return
+    end
+    DailyChallenge.Reset();WeeklyChallenge.Reset()
     -- 用存档角色初始化
     local charId = saveData.player and saveData.player.charId or "cat"
     selectedCharId = charId
@@ -884,6 +921,7 @@ local function ResumeBattle()
 
     -- 清除初始化时刷出的敌人，根据波次重新生成
     Enemy.Reset()
+    Wave.bossAlive=false
     local count = Config.WAVE.baseEnemyCount + Config.WAVE.countGrowth * Wave.waveNum
     for _ = 1, math.min(count, 15) do
         Enemy.SpawnAroundPlayer(Player.x, Player.y, "normal", Wave.waveCoeff)
@@ -1236,6 +1274,11 @@ function HandleUpdate(eventType, eventData)
             _freezeFrames = 0
         end
 
+        if pendingAutoSave and gameState == STATE_PLAYING then
+            pendingAutoSave = false
+            SaveData.SaveGame(Player, Wave, Skill, Loot, {hasUsedRevive=hasUsedRevive})
+        end
+
         -- 伤害跳字和粒子始终更新（技能选择期间也淡出）
         if not HUD.paused then
             DamageNumber.Update(dt)
@@ -1508,9 +1551,9 @@ function RenderNickname()
         local textY = nameBoxY + nameBoxH / 2
 
         if #tempNickname > 0 then
-            nvgText(vg, textX, textY, tempNickname)
+            nvgUserText(vg, textX, textY, tempNickname)
             -- 光标在文字后
-            local tw = nvgTextBounds(vg, 0, 0, tempNickname)
+            local tw = nvgUserTextBounds(vg, 0, 0, tempNickname)
             local cursorX = textX + tw + 2
             local cursorAlpha = math.floor(128 + 127 * math.sin(t * 6))
             nvgBeginPath(vg)
@@ -1532,7 +1575,7 @@ function RenderNickname()
         nvgTextAlign(vg, NVG_ALIGN_CENTER + NVG_ALIGN_MIDDLE)
     else
         -- 普通模式：居中显示
-        nvgText(vg, cx, nameBoxY + nameBoxH / 2, tempNickname)
+        nvgUserText(vg, cx, nameBoxY + nameBoxH / 2, tempNickname)
     end
 
     -- 按钮区域：三个按钮一排
@@ -1861,7 +1904,7 @@ function RenderTitle()
 
     nvgFontSize(vg, 19)
     nvgFillColor(vg, nvgRGBA(120, 210, 255, 230))
-    nvgText(vg, cx, subY, I18n.lang == "zh" and "emoji 英雄战斗" or "Emoji Hero Battle")
+    nvgText(vg, cx, subY, I18n.t("game_title"))
 
     nvgFontSize(vg, 18)
     nvgFillColor(vg, nvgRGBA(255, 220, 100, 130))
@@ -1872,7 +1915,7 @@ function RenderTitle()
     if SaveData.nickname then
         local nickText = "👋 " .. SaveData.nickname .. "  ✏️"
         nvgFontSize(vg, 16)
-        local tw = nvgTextBounds(vg, 0, 0, nickText)
+        local tw = nvgUserTextBounds(vg, 0, 0, nickText)
         local ebW = tw + 30
         local ebH = 36
         local ebX = cx - ebW / 2
@@ -1894,7 +1937,7 @@ function RenderTitle()
         nvgStrokeWidth(vg, 1.5)
         nvgStroke(vg)
         nvgFillColor(vg, nvgRGBA(200, 220, 255, 220))
-        nvgText(vg, cx, ebY + ebH / 2, nickText)
+        nvgUserText(vg, cx, ebY + ebH / 2, nickText)
     end
 
     -- ── 按钮区域（新游戏置顶，全宽）──
@@ -2661,7 +2704,7 @@ function RenderLeaderboard()
                 if #displayName > 24 then
                     displayName = string.sub(displayName, 1, 21) .. "..."
                 end
-                nvgText(vg, 80, ry, displayName)
+                nvgUserText(vg, 80, ry, displayName)
 
                 -- 主排序列 + 副列
                 nvgTextAlign(vg, NVG_ALIGN_RIGHT + NVG_ALIGN_MIDDLE)
@@ -2783,6 +2826,11 @@ function RenderCharSelect()
         nvgFill(vg)
     end
 
+    nvgFontFaceId(vg, zpix)
+    nvgFontSize(vg, 20)
+    nvgTextAlign(vg, NVG_ALIGN_LEFT + NVG_ALIGN_MIDDLE)
+    nvgFillColor(vg, nvgRGBA(210, 230, 255, 255))
+    nvgText(vg, 24, 42, I18n.t("lb_back"))
     local cx = DESIGN_W / 2
 
     -- 标题
@@ -3134,7 +3182,7 @@ function RenderCharSelect()
     local diffBarH = 36
     local diffs = Config.DIFFICULTY
     local diffCount = #diffs
-    local diffBtnW = 64
+    local diffBtnW = I18n.lang == "en" and 112 or 64
     local diffGap = 8
     local diffTotalW = diffCount * diffBtnW + (diffCount - 1) * diffGap
     local diffStartX = (DESIGN_W - diffTotalW) / 2
@@ -3197,6 +3245,7 @@ function RenderCharSelect()
     nvgFillColor(vg, nvgRGBA(180, 180, 200, 140))
     nvgText(vg, DESIGN_W / 2, diffBarY + diffBarH + 10, curDiff.desc)
 
+    if charSelectMode ~= "weekly" then
     -- 每日挑战入口按钮（在难度选择下方）
     local dcBtnW = DESIGN_W - 32
     local dcBtnH = 52
@@ -3309,6 +3358,8 @@ function RenderCharSelect()
         nvgText(vg, detailX + 36, ry + rowH / 2 + 10, fac.desc)
     end
 
+    end -- hide the unrelated daily challenge while selecting a weekly hero
+
     -- 底部提示
     nvgFontFaceId(vg, zpix)
     nvgFontSize(vg, 13)
@@ -3344,6 +3395,11 @@ end
 
 --- 角色选择触控处理（翻页模式）
 function HandleCharSelectTouch(dx, dy)
+    if dx >= 12 and dx <= 150 and dy >= 16 and dy <= 68 then
+        gameState = charSelectMode == "weekly" and STATE_WEEKLY or STATE_TITLE
+        charSelectMode = "normal"
+        return
+    end
     local chars = Config.CHARACTERS
     local total = #chars
 
@@ -3422,7 +3478,7 @@ function HandleCharSelectTouch(dx, dy)
     else
         -- 解锁状态：开始战斗按钮
         if dx >= btnX and dx <= btnX + btnW and dy >= btnY and dy <= btnY + btnH then
-            StartBattle()
+            if charSelectMode == "weekly" then StartWeeklyChallenge() else StartBattle() end
             return
         end
     end
@@ -3432,7 +3488,7 @@ function HandleCharSelectTouch(dx, dy)
     local diffBarH2 = 36
     local diffs2 = Config.DIFFICULTY
     local diffCount2 = #diffs2
-    local diffBtnW2 = 64
+    local diffBtnW2 = I18n.lang == "en" and 112 or 64
     local diffGap2 = 8
     local diffTotalW2 = diffCount2 * diffBtnW2 + (diffCount2 - 1) * diffGap2
     local diffStartX2 = (DESIGN_W - diffTotalW2) / 2
@@ -3443,6 +3499,8 @@ function HandleCharSelectTouch(dx, dy)
             return
         end
     end
+
+    if charSelectMode == "weekly" then return end
 
     -- 每日挑战按钮（无论角色是否解锁都可见）
     local dcBtnW = DESIGN_W - 32
@@ -3534,6 +3592,7 @@ local function LbDragEnd()
 end
 
 function HandleTouchMove(eventType, eventData)
+    if HUD.paused and HUD.audioDragging then local dx = ScreenToDesign(eventData["X"]:GetInt(), eventData["Y"]:GetInt()); HUD.MoveAudioSlider(dx); return end
     local tx = eventData["X"]:GetInt()
     local ty = eventData["Y"]:GetInt()
     if gameState == STATE_CODEX then
@@ -3570,6 +3629,7 @@ function HandleTouchMove(eventType, eventData)
 end
 
 function HandleTouchEnd(eventType, eventData)
+    HUD.EndAudioDrag()
     if gameState == STATE_CODEX then
         Codex.HandleDragEnd()
         return
@@ -3598,6 +3658,7 @@ function HandleTouchEnd(eventType, eventData)
 end
 
 function HandleMouseMove(eventType, eventData)
+    if HUD.paused and HUD.audioDragging then local dx = ScreenToDesign(input.mousePosition.x, input.mousePosition.y); HUD.MoveAudioSlider(dx); return end
     if gameState == STATE_CODEX then
         local mx = input.mousePosition.x
         local my = input.mousePosition.y
@@ -3647,6 +3708,7 @@ function HandleMouseMove(eventType, eventData)
 end
 
 function HandleMouseUp(eventType, eventData)
+    HUD.EndAudioDrag()
     if gameState == STATE_CODEX then
         Codex.HandleDragEnd()
         return
@@ -3763,6 +3825,7 @@ function HandleScreenTouch(screenX, screenY)
             GameAudio.PlaySFX("levelup")
             titleFlash = 0.22; titleFlashX = dx; titleFlashY = dy
             lastHighScoreRank = nil
+            charSelectMode = "normal"
             gameState = STATE_CHAR_SELECT
             selectedCharIdx = 1
             selectedCharId = Config.CHARACTERS[1].id
@@ -3903,7 +3966,8 @@ function HandleScreenTouch(screenX, screenY)
         elseif result == "claim" then
             WeeklyChallenge.ClaimLastSeasonReward()
         elseif result == "start" then
-            StartWeeklyChallenge()
+            charSelectMode = "weekly"
+            gameState = STATE_CHAR_SELECT
         else
             WeeklyChallenge.HandleDragBegin(dy)
         end
@@ -4047,6 +4111,8 @@ function HandleScreenTouch(screenX, screenY)
         end
         -- 暂停时：检测继续按钮 & 摇杆位置按钮 & 保存退出
         if HUD.paused then
+            if HUD.HandleAudioTouch(dx, dy) then return end
+            if HUD.HitSuspendButton(dx,dy) then if HUD.onSuspend then HUD.onSuspend() end;return end
             if HUD.HitContinueButton(dx, dy) then
                 HUD.paused = false
                 return

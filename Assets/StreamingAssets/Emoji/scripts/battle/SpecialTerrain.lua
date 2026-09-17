@@ -592,4 +592,11 @@ function SpecialTerrain.GetActiveBuffInfo()
     return list
 end
 
+function SpecialTerrain.ExportRunState()
+ return {_activeDefs=_activeDefs}
+end
+function SpecialTerrain.ImportRunState(data)
+ _activeDefs=data._activeDefs
+end
+
 return SpecialTerrain

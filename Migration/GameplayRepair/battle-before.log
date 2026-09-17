@@ -1,0 +1,73 @@
+Mono path[0] = 'C:/Test/Emoji_Survivor_Unity_Test/Emoji_Survivor_Test/Builds/DiagnosticsBefore/EmojiSurvivor_Data/Managed'
+Mono config path = 'C:/Test/Emoji_Survivor_Unity_Test/Emoji_Survivor_Test/Builds/DiagnosticsBefore/MonoBleedingEdge/etc'
+CodeReloadManager initialized
+Input System module state changed to: Initialized.
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+Initialize engine version: 6000.5.5f1 (d16e074b49fd)
+[Subsystems] Discovering subsystems at path C:/Test/Emoji_Survivor_Unity_Test/Emoji_Survivor_Test/Builds/DiagnosticsBefore/EmojiSurvivor_Data/UnitySubsystems
+[D3D12 Device Filter] Vendor Name: NVIDIA
+[D3D12 Device Filter] Device Name: NVIDIA GeForce RTX 5070 Laptop GPU
+[D3D12 Device Filter] Driver Version: 32.0.15.9191
+[D3D12 Device Filter] Feature Level: 12.2
+[D3D12 Device Filter] Graphics Memory: 7891 MB
+[D3D12 Device Filter] Processor Count: 20
+[D3D12 Device Filter] Device Type: Discrete
+GfxDevice: creating device client; kGfxThreadingModeSplitJobs
+d3d12: failed to query info queue interface (0x80004002).
+Direct3D:
+    Version:         Direct3D 12 [level 12.2]
+    Renderer:        NVIDIA GeForce RTX 5070 Laptop GPU (ID=0x2d58)
+    Vendor:          NVIDIA
+    VRAM:            7891 MB
+    App VRAM Budget: 7123 MB
+    Driver:          32.0.15.9191
+Begin MonoManager ReloadAssembly
+- Finished resetting the current domain, in  0.030 seconds
+[Physics::Module] Selected backend.
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+<RI> Initializing input.
+Using Windows.Gaming.Input
+UnloadTime: 0.889300 ms
+[MockCloud] Loaded store: 968 bytes
+[MockCloud] Installed! Local mock active (data in mockcloud.json)
+[SaveData] LoadProfile: raw JSON length=495
+[SaveData] LoadProfile: raw totems count=0 raw equipped count=0 metaGold=0 highestWave=1
+[SaveData] LoadProfile: after unpack totems=0 equipped=0
+[SaveData] Profile loaded, nickname=勇敢猫猫
+[Achievement] 从云端同步: first_wave_death
+[Achievement] 云端同步成功, mask=64
+[SaveData] Cloud meta loaded, no changes to save: gold=0 highestWave=1 totems=0
+[Cloud] 排行榜最高波次同步: 1
+[Achievement] Loaded, unlocked=1 eliteKills=0 bossKills=0
+[Achievement] 云端同步完成, unlocked=1
+[Codex] Loaded, discovered=7
+=== emoji 英雄战斗 ===
+Phase 1: Core Battle Prototype
+[SaveData] Game save deleted
+[MapVariant] Activated: 天空浮岛 (sky) with 45 decors, 9 obstacles
+[Codex] Cloud sync OK: codex_mask_1=257698037760
+[Codex] Cloud sync OK: codex_mask=562975723225089
+[Codex] DISCOVERED: ☁️ 天空浮岛
+[SpecialTerrain] Init: 3 terrain types for map=sky
+[Tombstone] 拉取到 0 个墓碑
+[Emoji Unity] Original Lua entry running. Saves: C:/Users/Moratorium/AppData/LocalLow/DefaultCompany/Emoji_Survivor_Test\EmojiSurvivorLua
+[PlayerCapture] state=1 frames=452 error= root=(x:0.00, y:0.00, width:720.00, height:1280.00)
+m_AtlasBlitShader=Hidden/Internal-UIRAtlasBlitCopy
+m_DefaultShader=Hidden/Internal-UIRDefault
+m_RuntimeGaussianBlurShader=NULL
+m_RuntimeColorEffectShader=NULL
+m_SDFShader=Hidden/TextCore/Distance Field SSD
+m_BitmapShader=Hidden/Internal-GUITextureClipText
+m_SpriteShader=NULL
+[Physics::Module] Cleanup current backend.
+[Physics::Module] Id: 0xf2b8ea05
+Input System module state changed to: ShutdownInProgress.
+Input Polling Thread exited.
+Input System module state changed to: Shutdown.
+CodeReloadManager destroyed
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.

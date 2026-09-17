@@ -16,6 +16,7 @@ local Enemy = {}
 Enemy.pool = {}
 -- 活跃敌人列表
 Enemy.active = {}
+Enemy.pendingKills = {}
 -- 当前 Boss 引用（方便 HUD 读取）
 Enemy.currentBoss = nil
 -- Boss 定义引用（来自 Config.BOSSES）
@@ -120,6 +121,7 @@ end
 
 --- 重置所有敌人
 function Enemy.Reset()
+    Enemy.pendingKills = {}
     for i = #Enemy.active, 1, -1 do
         Recycle(Enemy.active[i])
         table.remove(Enemy.active, i)
@@ -130,20 +132,24 @@ end
 
 --- 生成敌人
 function Enemy.Spawn(x, y, typeName, waveCoeff)
-    if #Enemy.active >= Config.WAVE.maxEnemiesAlive then return end
+    if #Enemy.active >= Config.WAVE.maxEnemiesAlive - 1 then return end
 
     local def = Config.ENEMY[typeName]
     if not def then return end
 
     local e = GetFromPool()
+    e.killHandled = false
     e.x = x
     e.y = y
     local hp = SM.mulFloor(def.baseHp, waveCoeff)
-    local atk = SM.mulFloor(def.baseAtk, waveCoeff)
+    local Balance=require('battle.DamageBalance')
+    local wave=require('battle.Wave')
+    local quantity=wave.quantityFactor or 1
+    local atk = SM.mulFloor(def.baseAtk * Balance.TypeMultiplier(typeName), Balance.AttackCoefficient(wave.waveNum))
     local spd = def.speed
     -- 难度乘数（ATK独立修正、速度修正）
     local diff = Config.GetDifficulty()
-    atk = SM.mulFloor(atk, diff.enemyAtkMult / diff.enemyHpMult)  -- waveCoeff已含HP乘数，ATK需补偿差值
+    atk = SM.mulFloor(atk, diff.enemyAtkMult)  -- waveCoeff已含HP乘数，ATK需补偿差值
     spd = math.floor(spd * diff.enemySpeedMult)
     -- 每日挑战：属性修改器
     if DailyChallenge.active then
@@ -162,12 +168,18 @@ function Enemy.Spawn(x, y, typeName, waveCoeff)
     local wcAtk = WeeklyChallenge.GetMod("enemyAtkMul")
     if wcAtk then atk = SM.mulFloor(atk, wcAtk) end
 
+    e.baseAttack=atk
+    e.quantityFactor=quantity
+    e.compressionMultiplier=Balance.QuantityAttack(quantity)
+    hp=SM.mulFloor(hp,quantity)
+    atk=SM.mulFloor(atk,e.compressionMultiplier)
+    e.spawnAttack=atk
     e.maxHp = hp
     e.hp = e.maxHp
     e.atk = atk
     e.speed = spd
     e.radius = def.radius
-    e.expDrop = def.expDrop
+    e.expDrop = SM.mulFloor(def.expDrop, quantity)
     e.typeName = typeName
     e.alive = true
     e.hitFlash = 0
@@ -239,7 +251,9 @@ end
 
 --- 生成 Boss（使用 Config.BOSSES 定义）
 function Enemy.SpawnBoss(x, y, bossDef, waveCoeff)
+    if #Enemy.active >= Config.WAVE.maxEnemiesAlive then return nil end
     local e = GetFromPool()
+    e.killHandled = false
     e.x = x
     e.y = y
     local bossHp = SM.mulFloor(bossDef.baseHp, waveCoeff)
@@ -247,6 +261,7 @@ function Enemy.SpawnBoss(x, y, bossDef, waveCoeff)
     if wcBossHp then bossHp = SM.mulFloor(bossHp, wcBossHp) end
     e.maxHp = bossHp
     e.hp = e.maxHp
+    e.baseAttack=0; e.quantityFactor=1; e.compressionMultiplier=1; e.spawnAttack=0
     e.atk = 0  -- Boss 无接触伤害
     local bossSpd = bossDef.speed
     local wcSpd2 = WeeklyChallenge.GetMod("enemySpeedMul")
@@ -475,6 +490,7 @@ function Enemy.Update(dt, playerX, playerY)
 
     for i = #Enemy.active, 1, -1 do
         local e = Enemy.active[i]
+        EnemyBullet.sourceContext=e
         if not e.alive then
             if e.isBoss and Enemy.currentBoss == e then
                 Enemy.currentBoss = nil
@@ -855,6 +871,7 @@ end
 
 --- 敌人受伤（支持冰冻伤害加成）
 function Enemy.Damage(enemy, amount)
+    if not enemy.alive or enemy.dying then return false, 0, false end
     -- 魅惑敌人无敌，不可被玩家伤害
     if enemy.charmed and enemy.charmedInvincible then
         return false, 0, false
@@ -885,6 +902,7 @@ function Enemy.Damage(enemy, amount)
         -- 启动死亡动画（0.25秒缩放+渐隐）
         enemy.dying = true
         enemy.deathTimer = 0.25
+        Enemy.pendingKills[#Enemy.pendingKills + 1] = enemy
         return true, finalAmount, isFrozenHit
     end
     return false, finalAmount, isFrozenHit

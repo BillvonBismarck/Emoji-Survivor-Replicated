@@ -5,6 +5,7 @@ using System.Text;
 
 namespace EmojiBridge {
 public sealed class LuaRuntime : IDisposable {
+ public string LastCallbackError="";
  const string D="emoji_lua54";
  [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int Callback(IntPtr state);
  [DllImport(D,CallingConvention=CallingConvention.Cdecl)] static extern IntPtr luaL_newstate();
@@ -29,7 +30,7 @@ public sealed class LuaRuntime : IDisposable {
  public int Push(double n){lua_pushnumber(State,n);return 1;}
  public int Push(bool b){lua_pushboolean(State,b?1:0);return 1;}
  public int Push(string s){var b=Encoding.UTF8.GetBytes(s??"");lua_pushlstring(State,b,(UIntPtr)b.Length);return 1;}
- public void Bind(string name,Func<int> action){Callback cb=_=>{try{return action();}catch(Exception e){UnityEngine.Debug.LogError("[Lua bridge] "+name+": "+e);return 0;}};callbacks.Add(cb);lua_pushcclosure(State,cb,0);lua_setglobal(State,name);}
+ public void Bind(string name,Func<int> action){Callback cb=_=>{try{return action();}catch(Exception e){LastCallbackError=name+": "+e;UnityEngine.Debug.LogError("[Lua bridge] "+name+": "+e);return 0;}};callbacks.Add(cb);lua_pushcclosure(State,cb,0);lua_setglobal(State,name);}
  public void Set(string name,string s){Push(s);lua_setglobal(State,name);}
  public void Set(string name,double v){Push(v);lua_setglobal(State,name);}
  public void Execute(string source,string name="bridge"){var b=Encoding.UTF8.GetBytes(source);Check(luaL_loadbufferx(State,b,(UIntPtr)b.Length,name,null));Check(lua_pcallk(State,0,0,0,IntPtr.Zero,IntPtr.Zero));}

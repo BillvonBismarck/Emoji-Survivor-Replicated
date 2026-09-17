@@ -265,7 +265,8 @@ function RelicShop.Render(vg, fontId, DESIGN_W, DESIGN_H)
         nvgFontSize(vg, 12)
         nvgTextAlign(vg, NVG_ALIGN_LEFT + NVG_ALIGN_MIDDLE)
         nvgFillColor(vg, nvgRGBA(170, 160, 200, 180))
-        nvgText(vg, textX, descY, relic.desc)
+        nvgTextAlign(vg, NVG_ALIGN_LEFT + NVG_ALIGN_TOP)
+        nvgTextBox(vg, textX, descY - 6, cX + cardW - 148 - textX, relic.desc)
 
         -- ── 升级按钮（右侧竖向居中）──
         local upgW = 120

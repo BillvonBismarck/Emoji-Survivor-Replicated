@@ -16,6 +16,7 @@ local TotemSystem = require("meta.TotemSystem")
 local RuneSystem = require("meta.RuneSystem")
 local Glow = require("fx.Glow")
 local I18n = require("utils.I18n")
+local GameAudio = require("fx.GameAudio")
 local PerfQuality = require("utils.PerfQuality")
 local Minimap = require("ui.Minimap")
 local DailyChallenge = require("meta.DailyChallenge")
@@ -786,7 +787,7 @@ function HUD.RenderPauseOverlay(vg, viewW, viewH, font)
     -- 中央面板卡片背景
     local panelW = viewW - 40
     local panelX = 20
-    local panelY = viewH / 2 - 180
+    local panelY = math.max(80, viewH / 2 - 350)
     local panelH = 130
     nvgBeginPath(vg)
     nvgRoundedRect(vg, panelX, panelY, panelW, panelH, 18)
@@ -841,8 +842,32 @@ function HUD.RenderPauseOverlay(vg, viewW, viewH, font)
     nvgFillColor(vg, nvgRGBA(255, 255, 255, math.floor(245 * pulse)))
     nvgText(vg, viewW / 2, btnY + btnH / 2, "▶ " .. I18n.t("pause_resume"))
 
+    -- Master gain changes do not restart a playing clip.
+    local audioY = btnY + btnH + 34
+    nvgFontSize(vg, 18)
+    nvgTextAlign(vg, NVG_ALIGN_CENTER + NVG_ALIGN_MIDDLE)
+    nvgFillColor(vg, nvgRGBA(220, 230, 245, 255))
+    nvgText(vg, viewW / 2, audioY, I18n.t("pause_volume", math.floor(GameAudio.volume * 100 + .5)))
+    HUD.volumeSlider = {x = viewW / 2 - 180, y = audioY + 32, w = 240}
+    local s = HUD.volumeSlider
+    nvgBeginPath(vg); nvgRoundedRect(vg, s.x, s.y - 4, s.w, 8, 4)
+    nvgFillColor(vg, nvgRGBA(70, 85, 110, 255)); nvgFill(vg)
+    if GameAudio.volume > 0 then
+        nvgBeginPath(vg); nvgRoundedRect(vg, s.x, s.y - 4, s.w * GameAudio.volume, 8, 4)
+        nvgFillColor(vg, nvgRGBA(80, 200, 240, 255)); nvgFill(vg)
+    end
+    nvgBeginPath(vg); nvgCircle(vg, s.x + s.w * GameAudio.volume, s.y, 11)
+    nvgFillColor(vg, nvgRGBA(230, 245, 255, 255)); nvgFill(vg)
+    HUD.muteBtn = {x = s.x + s.w + 20, y = s.y - 20, w = 100, h = 40}
+    local m = HUD.muteBtn
+    nvgBeginPath(vg); nvgRoundedRect(vg, m.x, m.y, m.w, m.h, 8)
+    nvgFillColor(vg, GameAudio.muted and nvgRGBA(180, 75, 80, 220) or nvgRGBA(50, 100, 130, 220)); nvgFill(vg)
+    nvgFontSize(vg, 17)
+    nvgFillColor(vg, nvgRGBA(245, 250, 255, 255))
+    nvgText(vg, m.x + m.w / 2, s.y, I18n.t(GameAudio.muted and "pause_unmute" or "pause_mute"))
+
     -- ── 摇杆位置设置 ──
-    local optY = btnY + btnH + 32
+    local optY = audioY + 80
     nvgFontFaceId(vg, textFont)
     nvgFontSize(vg, 18)
     nvgTextAlign(vg, NVG_ALIGN_CENTER + NVG_ALIGN_MIDDLE)
@@ -1065,7 +1090,7 @@ function HUD.RenderPauseOverlay(vg, viewW, viewH, font)
         nvgFontSize(vg, 17)
         nvgTextAlign(vg, NVG_ALIGN_CENTER + NVG_ALIGN_MIDDLE)
         nvgFillColor(vg, nvgRGBA(255, 255, 255, sel and 255 or 160))
-        nvgText(vg, lx + lnBtnW / 2, lnBtnY + lnBtnH / 2, I18n.LANG_LABELS[lang])
+        nvgUserText(vg, lx + lnBtnW / 2, lnBtnY + lnBtnH / 2, I18n.LANG_LABELS[lang])
 
         HUD.langBtns[i] = { x = lx, y = lnBtnY, w = lnBtnW, h = lnBtnH, key = lang }
     end
@@ -1074,7 +1099,19 @@ function HUD.RenderPauseOverlay(vg, viewW, viewH, font)
     local seBtnW = HUD.saveExitBtnW
     local seBtnH = HUD.saveExitBtnH
     local seBtnX = (viewW - seBtnW) / 2
-    local seBtnY = lnBtnY + lnBtnH + 36
+    local suspendY = lnBtnY + lnBtnH + 30
+    HUD.suspendBtn={x=viewW/2-150,y=suspendY,w=300,h=48}
+    local sb=HUD.suspendBtn
+    nvgBeginPath(vg);nvgRoundedRect(vg,sb.x,sb.y,sb.w,sb.h,10)
+    nvgFillColor(vg,nvgRGBA(30,110,160,200));nvgFill(vg)
+    nvgStrokeColor(vg,nvgRGBA(100,210,255,220));nvgStrokeWidth(vg,1.5);nvgStroke(vg)
+    nvgFontSize(vg,20);nvgTextAlign(vg,NVG_ALIGN_CENTER+NVG_ALIGN_MIDDLE)
+    nvgFillColor(vg,nvgRGBA(235,245,255,255));nvgText(vg,viewW/2,suspendY+24,I18n.t("pause_suspend"))
+    if HUD.saveMessage then
+        nvgFontSize(vg,16);nvgFillColor(vg,nvgRGBA(255,150,130,255))
+        nvgText(vg,viewW/2,suspendY+132,HUD.saveMessage)
+    end
+    local seBtnY = suspendY + 60
     HUD.saveExitBtnX = seBtnX
     HUD.saveExitBtnY = seBtnY
 
@@ -1170,11 +1207,32 @@ function HUD.HitLangButton(dx, dy)
     return nil
 end
 
+function HUD.HandleAudioTouch(dx, dy)
+    local m, s = HUD.muteBtn, HUD.volumeSlider
+    if m and dx >= m.x and dx <= m.x + m.w and dy >= m.y and dy <= m.y + m.h then
+        GameAudio.SetMuted(not GameAudio.muted); HUD.SaveSettings(); return true
+    end
+    if s and dx >= s.x - 16 and dx <= s.x + s.w + 16 and math.abs(dy - s.y) <= 24 then
+        HUD.audioDragging = true; HUD.MoveAudioSlider(dx); return true
+    end
+    return false
+end
+function HUD.MoveAudioSlider(dx)
+    if HUD.paused and HUD.audioDragging and HUD.volumeSlider then
+        GameAudio.SetVolume((dx - HUD.volumeSlider.x) / HUD.volumeSlider.w)
+    end
+end
+function HUD.EndAudioDrag()
+    if HUD.audioDragging then HUD.audioDragging = false; HUD.SaveSettings() end
+end
+
 --- 保存用户设置到本地
 function HUD.SaveSettings()
     local ok, cjson = pcall(require, "cjson")
     if not ok then return end
     local data = {
+        masterVolume = GameAudio.volume,
+        muted = GameAudio.muted,
         joystickPos  = HUD.joystickPos,
         eightDirMode = HUD.eightDirMode,
         glowEnabled  = Glow.enabled,
@@ -1198,6 +1256,8 @@ function HUD.LoadSettings()
         local ok2, data = pcall(cjson.decode, file:ReadString())
         file:Close()
         if ok2 and data then
+            GameAudio.SetVolume(data.masterVolume)
+            GameAudio.SetMuted(data.muted)
             if data.joystickPos == "left" or data.joystickPos == "center" or data.joystickPos == "right" or data.joystickPos == "hide" then
                 HUD.joystickPos = data.joystickPos
             end
@@ -1225,6 +1285,10 @@ end
 ---@param dx number 设计坐标X
 ---@param dy number 设计坐标Y
 ---@return boolean
+function HUD.HitSuspendButton(dx,dy)
+    local b=HUD.suspendBtn
+    return b and dx>=b.x and dx<=b.x+b.w and dy>=b.y and dy<=b.y+b.h
+end
 function HUD.HitSaveExitButton(dx, dy)
     return dx >= HUD.saveExitBtnX and dx <= HUD.saveExitBtnX + HUD.saveExitBtnW and dy >= HUD.saveExitBtnY and dy <= HUD.saveExitBtnY + HUD.saveExitBtnH
 end
@@ -1379,9 +1443,9 @@ function HUD.RenderGameOver(vg, viewW, viewH, font, isVictory, stats)
 
             if #HUD.tombLastWords > 0 then
                 nvgFillColor(vg, nvgRGBA(255, 255, 255, 255))
-                nvgText(vg, textX, textY, HUD.tombLastWords)
+                nvgUserText(vg, textX, textY, HUD.tombLastWords)
                 if HUD.tombEditMode then
-                    local tw = nvgTextBounds(vg, 0, 0, HUD.tombLastWords)
+                    local tw = nvgUserTextBounds(vg, 0, 0, HUD.tombLastWords)
                     local cursorX = textX + tw + 2
                     local ca = math.floor(128 + 127 * math.sin(t * 6))
                     nvgBeginPath(vg)

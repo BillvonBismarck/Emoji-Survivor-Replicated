@@ -314,7 +314,7 @@ function TotemShop.Render(vg, fontId, DESIGN_W, DESIGN_H)
         if bonuses.spdFlat > 0 then bonusParts[#bonusParts + 1] = "SPD+" .. math.floor(bonuses.spdFlat) end
         if bonuses.critBonus > 0 then bonusParts[#bonusParts + 1] = I18n.t("totem_bonus_crit", math.floor(bonuses.critBonus * 100)) end
         if bonuses.fireRateBonus > 0 then bonusParts[#bonusParts + 1] = I18n.t("totem_bonus_firerate", math.floor(bonuses.fireRateBonus * 100)) end
-        if bonuses.hpRegenBonus > 0 then bonusParts[#bonusParts + 1] = I18n.t("totem_bonus_regen", bonuses.hpRegenBonus * 100) end
+        if bonuses.goldDropBonus > 0 then bonusParts[#bonusParts + 1] = I18n.t("totem_bonus_gold", bonuses.goldDropBonus * 100) end
         if bonuses.lootBonus > 0 then bonusParts[#bonusParts + 1] = I18n.t("totem_bonus_loot", math.floor(bonuses.lootBonus * 100)) end
         for _, sid in ipairs(bonuses.skillTotems) do
             local stc = TotemSystem.TYPE_CONFIG[sid]

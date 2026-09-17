@@ -138,6 +138,7 @@ end
 -- 获取今日配置（缓存，同一天只计算一次）
 -- ============================================================================
 function DailyChallenge.GetTodayConfig()
+    if DailyChallenge.active and DailyChallenge.todayConfig then return DailyChallenge.todayConfig end
     local utc = os.date("!*t")
     local dateKey = string.format("%02d%02d", utc.month, utc.day)
 

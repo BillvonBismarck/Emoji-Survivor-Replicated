@@ -83,6 +83,11 @@ function RuneEffects.Reset()
 end
 
 --- 获取内部状态（供外部查询）
+function RuneEffects.GetDiagnosticState()
+    return {workerLayers=state.workerLayers or 0,doctorCD=state.doctorCD or 0,
+      doctorReductionTimer=state.doctorDmgReductionTimer or 0,doctorReduction=state.doctorDmgReduction or 0,
+      firefighterCD=state.firefighterCD or 0,firefighterImmuneTimer=state.firefighterImmuneTimer or 0}
+end
 function RuneEffects.GetState()
     return state
 end
@@ -802,6 +807,13 @@ end
 ---@return table|nil
 function RuneEffects.GetActiveResonance()
     return RuneResonance.GetActive()
+end
+
+function RuneEffects.ExportRunState()
+ return {state=state}
+end
+function RuneEffects.ImportRunState(data)
+ state=data.state
 end
 
 return RuneEffects

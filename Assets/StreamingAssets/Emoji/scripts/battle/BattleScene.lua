@@ -105,7 +105,8 @@ BattleScene.onBombKills = nil      -- function(bombKills) -> 炸弹击杀数回�
 
 --- 初始化战斗
 ---@param charId string|nil 角色ID
-function BattleScene.Init(charId)
+function BattleScene.Init(charId, restoring)
+    require("battle.CombatTelemetry").Reset()
     Player.Init(charId)
 
     -- 应用皮肤外观覆盖（浅拷贝 charDef 避免污染 Config.CHARACTERS）
@@ -148,7 +149,8 @@ function BattleScene.Init(charId)
     -- 百分比数值加成
     Player.totemCritBonus     = bonuses.critBonus
     Player.totemFireRateBonus = bonuses.fireRateBonus
-    Player.totemHpRegenBonus  = bonuses.hpRegenBonus
+    Player.totemHpRegenBonus  = 0
+    Player.totemGoldDropBonus = bonuses.goldDropBonus
     Player.totemLootBonus     = bonuses.lootBonus
 
     -- 异界天赋：未毕业即可学习其他角色的非专属技能
@@ -207,6 +209,8 @@ function BattleScene.Init(charId)
     -- 注入 Player 引用供 Loot 金币掉率计算使用（避免循环 require）
     Loot._Player = Player
 
+    -- Restored maps come from the snapshot; do not unlock a random map on Continue.
+    if not restoring then
     -- 初始化地图变体（随机选择）
     local mapSeed = os.time() + math.random(9999)
     MapVariant.Init(nil, mapSeed)
@@ -219,6 +223,8 @@ function BattleScene.Init(charId)
     -- 初始化地图专属特别地形散点
     local variantId = MapVariant.active and MapVariant.active.id or "cyber"
     SpecialTerrain.Init(variantId, mapSeed)
+
+    end
 
     -- 拉取其他玩家墓碑（异步，不阻塞初始化）
     Tombstone.Reset()
@@ -295,7 +301,7 @@ function BattleScene.Init(charId)
         Particle.SpawnFlash(255, 200, 100, 0.25, 100)
         -- 每日挑战 炸弹风险：自伤10点
         if DailyChallenge.HasFactor("bomb_risk") then
-            local dead = Player.TakeDamage(10)
+            local dead = Player.TakeDamage(10,{source='map_event',baseDamage=10})
             DamageNumber.SpawnDamage(Player.x, Player.y - 10, 10, false)
             if dead then
                 -- 内联提交金币（避免前向引用 local CommitSessionGold）
@@ -413,6 +419,8 @@ end
 ---@param killedList table 被击杀的敌人列表
 local function HandleKills(killedList)
     for _, e in ipairs(killedList) do
+        if e.killHandled then goto continue end
+        e.killHandled = true
         -- ── 魅惑触发（击杀 → 复活为我方）──
         -- TryCharmOnKill 会将敌人复活并标记 charmed，此时跳过掉落/死亡特效
         Skill.TryCharmOnKill(e, Player.skills)
@@ -516,6 +524,13 @@ local function HandleKills(killedList)
 end
 
 --- 将本局累积金币存入局外存档，并更新最高波次
+-- Some rune/area attacks use Enemy.Damage directly instead of returning kills.
+-- Drain before enemies can be recycled; chains append to the same bounded queue.
+local function DrainPendingKills()
+    HandleKills(Enemy.pendingKills)
+    for i = #Enemy.pendingKills, 1, -1 do Enemy.pendingKills[i] = nil end
+end
+
 local function CommitSessionGold()
     if BattleScene.sessionGold > 0 then
         local diff = Config.GetDifficulty()
@@ -542,6 +557,7 @@ end
 function BattleScene.Update(dt, moveX, moveY, viewW, viewH)
     if BattleScene.state ~= BattleScene.STATE_PLAYING then return end
 
+    require("battle.CombatTelemetry").BeginFrame()
     -- 限制 dt 防止卡顿导致跳帧
     dt = math.min(dt, 0.05)
     BattleScene.heartbeat.frame = BattleScene.heartbeat.frame + 1
@@ -735,6 +751,8 @@ function BattleScene.Update(dt, moveX, moveY, viewW, viewH)
         end
     end)
 
+    DrainPendingKills()
+
     -- 6. 敌人更新
     local enemyUpdateOk = safeCall("Enemy", Enemy.Update, dt, Player.x, Player.y)
     if enemyUpdateOk then
@@ -764,7 +782,7 @@ function BattleScene.Update(dt, moveX, moveY, viewW, viewH)
         end
         if bulletDmg > 0 then
             local wasInv = Player.invTimer > 0
-            local dead = Player.TakeDamage(bulletDmg)
+            local dead = Player.TakeDamage(bulletDmg,EnemyBullet.lastHit)
             if not wasInv then
                 GameAudio.PlaySFX("player_hurt")
                 DamageNumber.SpawnDamage(Player.x, Player.y - 20, bulletDmg, false)
@@ -796,7 +814,7 @@ function BattleScene.Update(dt, moveX, moveY, viewW, viewH)
         local dashDmg = (ok and dmg) or 0
         if dashDmg > 0 then
             local wasInv = Player.invTimer > 0
-            local dead = Player.TakeDamage(dashDmg)
+            local dead = Player.TakeDamage(dashDmg,{source='boss_dash',enemyId=Enemy.currentBoss and Enemy.currentBoss.bossId})
             if not wasInv then
                 DamageNumber.SpawnDamage(Player.x, Player.y - 20, dashDmg, false)
                 Particle.Spawn(Player.x, Player.y, "player_hit")
@@ -822,7 +840,7 @@ function BattleScene.Update(dt, moveX, moveY, viewW, viewH)
         if ok and hits then
             for _, e in ipairs(hits) do
                 local wasInv = Player.invTimer > 0
-                local dead = Player.TakeDamage(e.atk)
+                local dead = Player.TakeDamage(e.atk,{source='contact',enemyType=e.typeName,enemyId=e.bossId,baseDamage=(e.baseAttack or e.atk)*(e.enraged and 1.8 or 1),quantityFactor=e.quantityFactor,compressionMultiplier=e.compressionMultiplier,compressedDamage=e.atk,hitCount=1,contributors={{enemyType=e.typeName,enraged=e.enraged,contactCandidates=#hits}}})
                 if not wasInv then
                     DamageNumber.SpawnDamage(Player.x, Player.y - 20, e.atk, false)
                     Particle.Spawn(Player.x, Player.y, "player_hit")
@@ -889,6 +907,8 @@ function BattleScene.Update(dt, moveX, moveY, viewW, viewH)
 
     -- 10. 屏幕震动
     pcall(ScreenShake.Update, dt)
+
+    DrainPendingKills()
 
     -- 11. 相机（必须执行，否则画面不跟随）
     local camOk, camErr = pcall(UpdateCamera, viewW, viewH)

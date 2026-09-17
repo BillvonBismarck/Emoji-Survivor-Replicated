@@ -1,3 +1,5 @@
+
+> 2026-09-16 后续玩法与显示修复已应用。当前 Lua 含经批准的平衡修改，详情与最新验证见 [GameplayRepair/README.md](GameplayRepair/README.md)。下文的逐字节一致性与初版验证描述属于修复前基线。
 # Emoji Survivor — Unity / 原 Lua 复现
 
 ## 启动

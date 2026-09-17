@@ -327,4 +327,12 @@ function RuneResonance.RenderHUD(vg, hudX, hudY, totalTime)
     nvgText(vg, hudX, hudY, activeCombo.icon .. " " .. activeCombo.name)
 end
 
+function RuneResonance.ExportRunState()
+ return {activeCombo=activeCombo,resonanceFX=resonanceFX}
+end
+function RuneResonance.ImportRunState(data)
+ activeCombo=data.activeCombo
+ resonanceFX=data.resonanceFX
+end
+
 return RuneResonance

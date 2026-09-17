@@ -2177,6 +2177,8 @@ function Skill.TryCharmOnKill(enemy, playerSkills)
 
     -- 复活该敌人：恢复满血、标记魅惑、无敌
     enemy.alive = true
+    enemy.dying = false
+    enemy.deathTimer = 0
     enemy.hp = enemy.maxHp or enemy.hp
     enemy.charmed = true
     enemy.charmedInvincible = true
@@ -3395,6 +3397,32 @@ function Skill.ImportState(state)
             }
         end
     end
+end
+
+function Skill.ExportRunState()
+ return {elephants=elephants,charmedEnemies=charmedEnemies,horseProjectiles=horseProjectiles,horseWhirlwinds=horseWhirlwinds,ottoBoxes=ottoBoxes,catScratchHitQueue=catScratchHitQueue,clones=clones,beanTraps=beanTraps,flyingGrenades=flyingGrenades,taichiWaves=taichiWaves,droneTrails=droneTrails,greenDroneTrails=greenDroneTrails,cloneSharedAngle=cloneSharedAngle,catScratchAngle=catScratchAngle,thumbUpAngle=thumbUpAngle,trailHead=trailHead,trailTimer=trailTimer,greenTrailHead=greenTrailHead,greenTrailTimer=greenTrailTimer,greenDroneCollisionTimer=greenDroneCollisionTimer}
+end
+function Skill.ImportRunState(data)
+ elephants=data.elephants
+ charmedEnemies=data.charmedEnemies
+ horseProjectiles=data.horseProjectiles
+ horseWhirlwinds=data.horseWhirlwinds
+ ottoBoxes=data.ottoBoxes
+ catScratchHitQueue=data.catScratchHitQueue
+ clones=data.clones
+ beanTraps=data.beanTraps
+ flyingGrenades=data.flyingGrenades
+ taichiWaves=data.taichiWaves
+ droneTrails=data.droneTrails
+ greenDroneTrails=data.greenDroneTrails
+ cloneSharedAngle=data.cloneSharedAngle
+ catScratchAngle=data.catScratchAngle
+ thumbUpAngle=data.thumbUpAngle
+ trailHead=data.trailHead
+ trailTimer=data.trailTimer
+ greenTrailHead=data.greenTrailHead
+ greenTrailTimer=data.greenTrailTimer
+ greenDroneCollisionTimer=data.greenDroneCollisionTimer
 end
 
 return Skill

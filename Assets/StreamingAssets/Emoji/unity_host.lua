@@ -26,13 +26,13 @@ local function encode(v,seen)
  local out={} if arr then for i=1,n do out[i]=encode(v[i],seen)end else for k,x in pairs(v) do out[#out+1]=quote(tostring(k))..':'..encode(x,seen)end end
  seen[v]=nil return (arr and '[' or '{')..table.concat(out,',')..(arr and ']' or '}')
 end
-cjson={encode=encode,decode=function(s)local src=unity_json_lua(s) local f,e=load('return '..src,'json','t',{}) if not f then error(e)end return f()end}
+cjson={encode=encode,decode=function(s)local src=unity_json_lua(s) assert(src and #src>0,'Invalid JSON') local f,e=load('return '..src,'json','t',{}) if not f then error(e)end return f()end}
 package.loaded.cjson=cjson
 File=function(name,mode)
  local f={name=name,mode=mode,open=true}
  function f:IsOpen()return self.open and (self.mode==FILE_WRITE or unity_exists(self.name))end
  function f:ReadString()return unity_read(self.name)end
- function f:WriteString(s)unity_write(self.name,s)end
+ function f:WriteString(s)assert(unity_write(self.name,s),'Save write failed')end
  function f:Close()self.open=false end
  return f
 end
@@ -56,9 +56,12 @@ nvgLinearGradient=function(_,x,y,x2,y2,c1,c2)return {1,x,y,x2,y2,c1,c2}end
 nvgRadialGradient=function(_,x,y,r1,r2,c1,c2)return {2,x,y,r1,r2,c1,c2}end
 nvgBoxGradient=function(_,x,y,w,h,r,f,c1,c2)return {3,x,y,w,h,c1,c2,r,f}end
 nvgFillPaint=function(_,p)unity_draw(32,p[1],p[2],p[3],p[4],p[5],table.unpack(p[6]));unity_draw(33,table.unpack(p[7]));if p[1]==3 then unity_draw(34,p[8],p[9])end end
-nvgText=function(_,x,y,s)return unity_text(x,y,tostring(s),0)end
-nvgTextBounds=function(_,x,y,s)return unity_measure(tostring(s))end
-nvgTextBox=function(_,x,y,w,s)return unity_text(x,y,tostring(s),w)end
+local I18n = require("utils.I18n")
+nvgUserText=function(_,x,y,s)return unity_text(x,y,tostring(s),0)end
+nvgUserTextBounds=function(_,x,y,s)return unity_measure(tostring(s))end
+nvgText=function(_,x,y,s)return unity_text(x,y,I18n.Localize(s),0)end
+nvgTextBounds=function(_,x,y,s)return unity_measure(I18n.Localize(s))end
+nvgTextBox=function(_,x,y,w,s)return unity_text(x,y,I18n.Localize(s),w)end
 local function ev(v)return {GetFloat=function()return v end,GetInt=function()return v end,GetString=function()return v end}end
 require('main')
 function UnityStart()Start()end
@@ -83,7 +86,7 @@ end
 function UnityRender()
  HandleNanoVGRender(nil,{})
  local j=unityJoystick
- if j and j.visible then
+ if j and j.visible and gameState==1 and not require("ui.HUD").paused then
   local x,y=j.active and j.bx or j.cx,j.active and j.by or j.cy
   x=x or 360 y=y or 1080
   local alpha=j.active and 217 or 128

@@ -1,0 +1,305 @@
+{
+  "luaCount": 48,
+  "allSyntaxPass": true,
+  "changed": [
+    "battle\\BattleScene.lua",
+    "battle\\CombatTelemetry.lua",
+    "battle\\DamageBalance.lua",
+    "battle\\Enemy.lua",
+    "battle\\EnemyBullet.lua",
+    "battle\\Player.lua",
+    "battle\\RuneEffects.lua",
+    "battle\\Wave.lua",
+    "meta\\TotemSystem.lua"
+  ],
+  "files": [
+    {
+      "path": "Achievement.lua",
+      "syntaxPass": true,
+      "sha256": "9cb0cfb484bf92523f180b6ea456aa08df6213e765be2043f72ddd3d9301781b",
+      "modified": false
+    },
+    {
+      "path": "Config.lua",
+      "syntaxPass": true,
+      "sha256": "1702bf828cd4d9fb88f43058d10fc7ad4ee0f04f0e040a9e09802839018caf46",
+      "modified": false
+    },
+    {
+      "path": "EmojiEditorBootstrap.lua",
+      "syntaxPass": true,
+      "sha256": "70f200f29842d797f7aa14961e80b4e1abbf3df2a2c2ee3c34a20eb38035a8eb",
+      "modified": false
+    },
+    {
+      "path": "main.lua",
+      "syntaxPass": true,
+      "sha256": "5169c6b2feab9158aa3f55c6cb35781790f9c37bcb5117cfdb497962462da231",
+      "modified": false
+    },
+    {
+      "path": "MockCloud.lua",
+      "syntaxPass": true,
+      "sha256": "36bde70fd8782e9eb6af5eb30e056e25b095014876992af16369b210669a46e0",
+      "modified": false
+    },
+    {
+      "path": "SaveData.lua",
+      "syntaxPass": true,
+      "sha256": "21d8bd7f307b7698b6716bf400a741a6dd75ae9da87a7b33b99cfd75c42f3e41",
+      "modified": false
+    },
+    {
+      "path": "battle\\BattleScene.lua",
+      "syntaxPass": true,
+      "sha256": "782d1232a15c69d411c8c4522bef341a5a804b32e7bf08a5f2e99489f46edc38",
+      "modified": true
+    },
+    {
+      "path": "battle\\CombatTelemetry.lua",
+      "syntaxPass": true,
+      "sha256": "0517b49f648b9fbbe309ba444b688d8d1badedf7c735b1ecc25d8940dc0c17d6",
+      "modified": true
+    },
+    {
+      "path": "battle\\DamageBalance.lua",
+      "syntaxPass": true,
+      "sha256": "a69519a99ec3740941e3ee47d468a090adc193175c43d904e3e0932d30abbf92",
+      "modified": true
+    },
+    {
+      "path": "battle\\Enemy.lua",
+      "syntaxPass": true,
+      "sha256": "36171fa0e4af350b47968f05d035bf4d0ad44a6efe8380eb0dff829ece060e03",
+      "modified": true
+    },
+    {
+      "path": "battle\\EnemyBullet.lua",
+      "syntaxPass": true,
+      "sha256": "f135c41eb6a3388b2502ab13825a542d62f8c25a37e0f1b9b88a293ebb1c28ca",
+      "modified": true
+    },
+    {
+      "path": "battle\\Loot.lua",
+      "syntaxPass": true,
+      "sha256": "555b2b7b84b6afc44a50769d529c6bec9379d28e025180b611a649f9d4be5bf7",
+      "modified": false
+    },
+    {
+      "path": "battle\\MapEvent.lua",
+      "syntaxPass": true,
+      "sha256": "233066fdce9f818e727b8b2c2f62858825642408f48b797715fd17c2440364a2",
+      "modified": false
+    },
+    {
+      "path": "battle\\MapVariant.lua",
+      "syntaxPass": true,
+      "sha256": "4c537f6e646a0b15da56e10f8ff8b54533e30439a39c1a40eafb880619a3907e",
+      "modified": false
+    },
+    {
+      "path": "battle\\Player.lua",
+      "syntaxPass": true,
+      "sha256": "16ee9614f919a557c8a9e6e238fa6b25ae49ee1ed999212bc50419e31542550d",
+      "modified": true
+    },
+    {
+      "path": "battle\\Projectile.lua",
+      "syntaxPass": true,
+      "sha256": "178a5b2f0669caa70f5865d2e046e98347385b2a6848b4fe7598cfbd74f32a8d",
+      "modified": false
+    },
+    {
+      "path": "battle\\RuneEffects.lua",
+      "syntaxPass": true,
+      "sha256": "631389b853e10644e62aa9127c40395d4c17ac1960946518cee1c39b9b49e600",
+      "modified": true
+    },
+    {
+      "path": "battle\\RuneResonance.lua",
+      "syntaxPass": true,
+      "sha256": "b6d67a48b87890900105848f445e601f9d7456beb33946842caa350aced57ad1",
+      "modified": false
+    },
+    {
+      "path": "battle\\Skill.lua",
+      "syntaxPass": true,
+      "sha256": "2314b12a80af4160cd62a18fb68217cb6d0892c411014d1035266e0d106e7645",
+      "modified": false
+    },
+    {
+      "path": "battle\\SpecialTerrain.lua",
+      "syntaxPass": true,
+      "sha256": "e2c0d3dbfc79fb093fb680de6cded8c3ba363c730a331c46b8abdc9766ed08ae",
+      "modified": false
+    },
+    {
+      "path": "battle\\Wave.lua",
+      "syntaxPass": true,
+      "sha256": "9e1962a17cc07be36048fd90e2c61bc0b51bcfec3559d59b3ea4a660773eb1f1",
+      "modified": true
+    },
+    {
+      "path": "fx\\GameAudio.lua",
+      "syntaxPass": true,
+      "sha256": "cc6f967b87337fcb952760d70013898429907a4c01a4e499745008eb4eb00ce4",
+      "modified": false
+    },
+    {
+      "path": "fx\\Glow.lua",
+      "syntaxPass": true,
+      "sha256": "fe20f5e22dbf3a7e1882d1f022dd348b69c100935e94bd331d1983c43b7c281e",
+      "modified": false
+    },
+    {
+      "path": "fx\\Particle.lua",
+      "syntaxPass": true,
+      "sha256": "4122b9d90cc76b53c28ca8536eb0a661d52b67b449fe036d73225889965f10ee",
+      "modified": false
+    },
+    {
+      "path": "fx\\ScreenShake.lua",
+      "syntaxPass": true,
+      "sha256": "70adf1a24056f8bcee753ac8c5d580cf9e748b20523870d234faaa8adf44f4af",
+      "modified": false
+    },
+    {
+      "path": "meta\\Codex.lua",
+      "syntaxPass": true,
+      "sha256": "e7084ae85b100770adc1fb4bdab68c97c1a3a1206a2eb0853e8cd1f8430b4118",
+      "modified": false
+    },
+    {
+      "path": "meta\\DailyChallenge.lua",
+      "syntaxPass": true,
+      "sha256": "b62ac231c92ee1421c43fff4f6020cd40450b549fa30a89ef68d10f967fda29e",
+      "modified": false
+    },
+    {
+      "path": "meta\\RelicSystem.lua",
+      "syntaxPass": true,
+      "sha256": "2b3c43f76db68f517125357b6e1e2bd428c146bf475af019106b199a79cc99ac",
+      "modified": false
+    },
+    {
+      "path": "meta\\RuneSystem.lua",
+      "syntaxPass": true,
+      "sha256": "fa46770d19ec6300151b64708758af9e1c7a257bdce98e8ccfca9a0557f78d43",
+      "modified": false
+    },
+    {
+      "path": "meta\\SkinSystem.lua",
+      "syntaxPass": true,
+      "sha256": "ce042b20f9f814bfe82e6d8beed3cefb584bc82e4f44c3090090d3d6ad719711",
+      "modified": false
+    },
+    {
+      "path": "meta\\TotemSystem.lua",
+      "syntaxPass": true,
+      "sha256": "b2dd2b6b85088c2c3afacbf1058489aaeaaa12f6983232197a313e0a74e7e063",
+      "modified": true
+    },
+    {
+      "path": "meta\\WeeklyChallenge.lua",
+      "syntaxPass": true,
+      "sha256": "1f71d6efe7b9e776f5239548402871fd2f80b890deb2ebd11c7a61a2b1dfc814",
+      "modified": false
+    },
+    {
+      "path": "social\\Tombstone.lua",
+      "syntaxPass": true,
+      "sha256": "1bc83541941c4aeba0364919e85dc2427cb1d1fad36ceb79ca36948cca001af2",
+      "modified": false
+    },
+    {
+      "path": "ui\\DamageNumber.lua",
+      "syntaxPass": true,
+      "sha256": "daf8e9f4d3f008e5910e8435eeaf4e2c502648607ff0896f3359664fdaf333b0",
+      "modified": false
+    },
+    {
+      "path": "ui\\DamageStats.lua",
+      "syntaxPass": true,
+      "sha256": "d7bb537f83f5845d9d8a845f8660a8971c92ccc359df151ee1c34f122aec8349",
+      "modified": false
+    },
+    {
+      "path": "ui\\GiftAd.lua",
+      "syntaxPass": true,
+      "sha256": "71111a44adc5a4dd6f62a10e3a012c31d50a3b4901a0f8e76d1d788a2beeb545",
+      "modified": false
+    },
+    {
+      "path": "ui\\HUD.lua",
+      "syntaxPass": true,
+      "sha256": "66cac031385077e224777528ca4474932da22552453918e27a3842db77c522ac",
+      "modified": false
+    },
+    {
+      "path": "ui\\Minimap.lua",
+      "syntaxPass": true,
+      "sha256": "e18d2f774ab00b44bb9d53018728aa91baa7a0cd0fdcec85e2a4bf7548939209",
+      "modified": false
+    },
+    {
+      "path": "ui\\RelicShop.lua",
+      "syntaxPass": true,
+      "sha256": "fbc924e29bf54b139d091fab0c21a97b9a4f751da8af8a9b0d2694294848a375",
+      "modified": false
+    },
+    {
+      "path": "ui\\RuneShop.lua",
+      "syntaxPass": true,
+      "sha256": "3c98501b4d66508d0a20241f96e9af858ec97b2a38069abf5d27fb5b69e57ba4",
+      "modified": false
+    },
+    {
+      "path": "ui\\SkillSelect.lua",
+      "syntaxPass": true,
+      "sha256": "823110ab75d4d0b53353e2046b4255f66478fa70ae86869377876fe943118726",
+      "modified": false
+    },
+    {
+      "path": "ui\\SkinShop.lua",
+      "syntaxPass": true,
+      "sha256": "675fb3ce367322463640b8072a5110ef7c27c142b6b805d4ce09807faf740cbf",
+      "modified": false
+    },
+    {
+      "path": "ui\\TotemShop.lua",
+      "syntaxPass": true,
+      "sha256": "68b13066c83e2589f9d2d81f5dbc1397b31a8c97267b200aec4b8bb143445c76",
+      "modified": false
+    },
+    {
+      "path": "utils\\FPSMonitor.lua",
+      "syntaxPass": true,
+      "sha256": "ad2eaf3b8746a0149a8143fbaa7feb23687928a38c0a6765aae6710598052f46",
+      "modified": false
+    },
+    {
+      "path": "utils\\I18n.lua",
+      "syntaxPass": true,
+      "sha256": "26d6b5fa61f874d0159e30266e4de6333d81ec6cc8627f25082f9b9e9584ebbc",
+      "modified": false
+    },
+    {
+      "path": "utils\\PerfQuality.lua",
+      "syntaxPass": true,
+      "sha256": "6fa14dbf5711d071d72606c2f0e9ff3dc2daceef5d47631cc100b86eb26eb9dc",
+      "modified": false
+    },
+    {
+      "path": "utils\\SafeMath.lua",
+      "syntaxPass": true,
+      "sha256": "c6c55de613117511fae81268188aa5f5126754d472340479c6a8cfcc6b56575d",
+      "modified": false
+    },
+    {
+      "path": "utils\\SpatialHash.lua",
+      "syntaxPass": true,
+      "sha256": "df6e689a8fad8fa7b8e71f20cfb36f36d7b0f54ad6076598ec12fc7fcde2fb29",
+      "modified": false
+    }
+  ]
+}

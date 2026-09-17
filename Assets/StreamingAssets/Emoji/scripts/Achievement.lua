@@ -35,7 +35,7 @@ for _, ch in ipairs(Config.CHARACTERS) do
     table.insert(charAchievements, {
         id = "char_lv50_" .. ch.id,
         name = ch.name .. " Lv.50",
-        desc = ch.name .. "达到50级",
+        desc = ch.name .. ": 达到50级",
         icon = ch.emoji,
         category = "character",
     })

@@ -3,6 +3,19 @@
 --- ============================================================================
 
 local GameAudio = {}
+GameAudio.volume = 1
+GameAudio.muted = false
+function GameAudio.ApplyVolume()
+    if unity_master_audio then unity_master_audio(GameAudio.muted and 0 or GameAudio.volume) end
+end
+function GameAudio.SetVolume(value)
+    GameAudio.volume = math.max(0, math.min(1, tonumber(value) or 1))
+    GameAudio.ApplyVolume()
+end
+function GameAudio.SetMuted(value)
+    GameAudio.muted = value == true
+    GameAudio.ApplyVolume()
+end
 
 -- 音频节点
 local bgmNode = nil
